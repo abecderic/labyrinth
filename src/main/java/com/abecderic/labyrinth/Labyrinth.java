@@ -38,7 +38,7 @@ public class Labyrinth
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        dimensionType = DimensionType.register("labyrinth", "labyrinth", "labyrinth".hashCode(), LabyrinthWorldProvider.class, false);
+        dimensionType = DimensionType.register("labyrinth", "_labyrinth", "labyrinth".hashCode(), LabyrinthWorldProvider.class, false);
         DimensionManager.registerDimension(Config.getConfig().dimId, dimensionType);
     }
 
