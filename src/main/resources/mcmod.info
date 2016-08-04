@@ -1,0 +1,16 @@
+[
+{
+  "modid": "labyrinth",
+  "name": "Labyrinth",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["abecderic"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
