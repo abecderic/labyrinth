@@ -32,7 +32,7 @@ public class LabyrinthCommand implements ICommand
     @Override
     public String getCommandUsage(ICommandSender sender)
     {
-        return new TextComponentTranslation("command.usage", "").getUnformattedText();
+        return new TextComponentTranslation("command.usage").getUnformattedText();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class LabyrinthCommand implements ICommand
     {
         if (args == null || args.length == 0)
         {
-            sender.addChatMessage(new TextComponentTranslation("command.usage", ""));
+            sender.addChatMessage(new TextComponentTranslation("command.usage"));
             return;
         }
         else
@@ -61,7 +61,7 @@ public class LabyrinthCommand implements ICommand
                     return;
                 }
             }
-            sender.addChatMessage(new TextComponentTranslation("command.usage", ""));
+            sender.addChatMessage(new TextComponentTranslation("command.usage"));
         }
     }
 
