@@ -1,6 +1,7 @@
 package com.abecderic.labyrinth.command;
 
 import com.abecderic.labyrinth.Labyrinth;
+import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -16,12 +17,19 @@ public class CommandChunkInfo implements ISubCommand
         if (sender instanceof EntityPlayerMP)
         {
             EntityPlayerMP player = (EntityPlayerMP)sender;
-            int x = (int)Math.floor(player.getPosition().getX() / 16D);
-            int z = (int)Math.floor(player.getPosition().getZ() / 16D);
-            player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo", x + "", z + ""));
-            LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z);
-            player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.north", chunk.getNorth().toString().toLowerCase()));
-            player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.west", chunk.getWest().toString().toLowerCase()));
+            if (player.dimension == Config.getConfig().dimId)
+            {
+                int x = (int) Math.floor(player.getPosition().getX() / 16D);
+                int z = (int) Math.floor(player.getPosition().getZ() / 16D);
+                player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo", x + "", z + ""));
+                LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z);
+                player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.north", chunk.getNorth().toString().toLowerCase()));
+                player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.west", chunk.getWest().toString().toLowerCase()));
+            }
+            else
+            {
+                sender.addChatMessage(new TextComponentTranslation("command.notinlabyrinth"));
+            }
         }
         else
         {
