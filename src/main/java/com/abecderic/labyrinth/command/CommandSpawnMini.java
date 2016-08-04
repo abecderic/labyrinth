@@ -2,10 +2,12 @@ package com.abecderic.labyrinth.command;
 
 import com.abecderic.labyrinth.Labyrinth;
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
+import net.minecraft.block.BlockCarpet;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -57,12 +59,22 @@ public class CommandSpawnMini implements ISubCommand
         {
             for (int j = 0; j < 16; j++)
             {
+                world.setBlockState(pos.add(2 * i, -2, 2 * j), Blocks.WOOL.getDefaultState());
+                world.setBlockState(pos.add(2 * i + 1, -2, 2 * j), Blocks.WOOL.getDefaultState());
+                world.setBlockState(pos.add(2 * i, -2, 2 * j + 1), Blocks.WOOL.getDefaultState());
+                world.setBlockState(pos.add(2 * i + 1, -2, 2 * j + 1), Blocks.WOOL.getDefaultState());
+
                 LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x + i, z + j);
                 world.setBlockState(pos.add(2 * i, -1, 2 * j), Blocks.WOOL.getDefaultState());
                 if (chunk.getNorth() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.WOOL.getDefaultState());
+                else
+                    world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
                 if (chunk.getWest() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.WOOL.getDefaultState());
+                else
+                    world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
+                world.setBlockState(pos.add(2 * i + 1, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
             }
         }
     }
