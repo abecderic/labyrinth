@@ -21,6 +21,7 @@ public class LabyrinthCommand implements ICommand
     {
         subCommands = new HashMap<String, ISubCommand>();
         subCommands.put("tp-in", new CommandTpIn());
+        subCommands.put("tp-out", new CommandTpOut());
     }
 
     @Override
