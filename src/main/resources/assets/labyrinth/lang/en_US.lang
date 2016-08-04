@@ -1,2 +1,5 @@
 command.usage=§cUsage: labyrinth <subCommand>
 command.onlyplayers=§cOnly usable by players
+command.chunkinfo=§7Chunk Info (%s, %s)
+command.chunkinfo.north=§7North wall: %s
+command.chunkinfo.west=§7West wall: %s

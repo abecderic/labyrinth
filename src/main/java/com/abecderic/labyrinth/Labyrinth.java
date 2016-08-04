@@ -3,6 +3,7 @@ package com.abecderic.labyrinth;
 import com.abecderic.labyrinth.command.LabyrinthCommand;
 import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.proxy.CommonProxy;
+import com.abecderic.labyrinth.util.LabyrinthWorldData;
 import com.abecderic.labyrinth.worldgen.LabyrinthWorldProvider;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
@@ -26,6 +27,7 @@ public class Labyrinth
     public static CommonProxy proxy;
 
     public DimensionType dimensionType;
+    public LabyrinthWorldData worldData;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -44,5 +46,11 @@ public class Labyrinth
     public void serverStarting(FMLServerStartingEvent event)
     {
         event.registerServerCommand(new LabyrinthCommand());
+        worldData = (LabyrinthWorldData) event.getServer().worldServerForDimension(Config.getConfig().dimId).loadItemData(LabyrinthWorldData.class, MODID);
+        if (worldData == null)
+        {
+            worldData = new LabyrinthWorldData(MODID);
+            event.getServer().worldServerForDimension(Config.getConfig().dimId).setItemData(MODID, worldData);
+        }
     }
 }
