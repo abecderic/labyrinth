@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 import javax.annotation.Nullable;
@@ -25,30 +26,30 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public Chunk provideChunk(int x, int z)
     {
-        Chunk c = new Chunk(world, x, z);
+        ChunkPrimer primer = new ChunkPrimer();
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < 16; j++)
             {
-                c.setBlockState(new BlockPos(i, 64, j), Blocks.BEDROCK.getDefaultState());
+                primer.setBlockState(i, 64, j, Blocks.BEDROCK.getDefaultState());
             }
         }
-        LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z);
+        LabyrinthChunk data = Labyrinth.instance.worldData.getDataForChunk(x, z);
         for (int j = 0; j < 7; j++)
         {
-            c.setBlockState(new BlockPos(0, 65 + j, 16), Blocks.CLAY.getDefaultState());
+            primer.setBlockState(0, 65 + j, 0, Blocks.BEDROCK.getDefaultState());
         }
         for (int i = 1; i < 16; i++)
         {
             for (int j = 0; j < 7; j++)
             {
-                if (chunk.getNorth() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || chunk.getNorth() != LabyrinthChunk.WallType.EXIT))
+                if (data.getNorth() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || data.getNorth() != LabyrinthChunk.WallType.EXIT))
                 {
-                    c.setBlockState(new BlockPos(i, 65 + j, 16), Blocks.CLAY.getDefaultState());
+                    primer.setBlockState(i, 65 + j, 0, Blocks.CLAY.getDefaultState());
                 }
-                if (chunk.getWest() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || chunk.getWest() != LabyrinthChunk.WallType.EXIT))
+                if (data.getWest() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || data.getWest() != LabyrinthChunk.WallType.EXIT))
                 {
-                    c.setBlockState(new BlockPos(0, 65 + j, i), Blocks.CLAY.getDefaultState());
+                    primer.setBlockState(0, 65 + j, i, Blocks.CLAY.getDefaultState());
                 }
             }
         }
@@ -58,11 +59,13 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
             {
                 for (int j = 0; j < 16; j++)
                 {
-                    c.setBlockState(new BlockPos(i, 71, j), Blocks.BEDROCK.getDefaultState());
+                    primer.setBlockState(i, 71, j, Blocks.BEDROCK.getDefaultState());
                 }
             }
         }
-        return c;
+        Chunk chunk = new Chunk(world, primer, x, z);
+        chunk.generateSkylightMap();
+        return chunk;
     }
 
     @Override

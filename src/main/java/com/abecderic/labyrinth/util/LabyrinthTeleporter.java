@@ -6,7 +6,6 @@ import net.minecraft.world.WorldServer;
 
 public class LabyrinthTeleporter extends Teleporter
 {
-
     public LabyrinthTeleporter(WorldServer worldIn)
     {
         super(worldIn);

@@ -26,6 +26,7 @@ public class LabyrinthWorldData extends WorldSavedData
             //System.out.println("tried to get data for chunk " + key + "; generating data for region " + (x >> 4) + "," + (z >> 4));
             chunk = new LabyrinthChunk(Math.random() < 0.5, Math.random() < 0.5, Math.random() < 0.2, Math.random() < 0.2);
             dataMap.put(key, chunk);
+            markDirty();
             return chunk;
         }
         else
