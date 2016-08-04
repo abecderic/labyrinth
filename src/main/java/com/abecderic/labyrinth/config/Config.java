@@ -7,7 +7,7 @@ import java.io.File;
 public class Config
 {
     private static Config config;
-    private int dimId;
+    public int dimId;
 
     public static Config getConfig()
     {
