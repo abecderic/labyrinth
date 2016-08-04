@@ -1,6 +1,7 @@
 package com.abecderic.labyrinth.worldgen;
 
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -22,7 +23,22 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public Chunk provideChunk(int x, int z)
     {
-        return new Chunk(world, x, z);
+        Chunk c = new Chunk(world, x, z);
+        for (int i = 0; i < 16; i++)
+        {
+            for (int j = 0; j < 16; j++)
+            {
+                c.setBlockState(new BlockPos(i, 64, j), Blocks.BEDROCK.getDefaultState());
+            }
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            if (z < 0) c.setBlockState(new BlockPos(i, 65, 0), Blocks.CLAY.getDefaultState());
+            else c.setBlockState(new BlockPos(i, 65, 16), Blocks.WOOL.getDefaultState());
+            if (z < 0) c.setBlockState(new BlockPos(16, 65, i), Blocks.CLAY.getDefaultState());
+            else c.setBlockState(new BlockPos(0, 65, i), Blocks.WOOL.getDefaultState());
+        }
+        return c;
     }
 
     @Override
