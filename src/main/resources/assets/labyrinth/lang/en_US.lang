@@ -3,3 +3,5 @@ command.onlyplayers=§cOnly usable by players
 command.chunkinfo=§7Chunk Info (%s§7, %s§7)
 command.chunkinfo.walls=§7north wall: %s§7, west wall: %s
 command.notinlabyrinth=§cThis command only works in the labyrinth.
+command.onlycreative=§cOnly usable by players in creative mode
+command.spawnmini.usage=§cUsage: labyrinth spawn-mini <chunkX> <chunkZ>
