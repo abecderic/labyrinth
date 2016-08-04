@@ -27,6 +27,7 @@ public class CommandSpawnMini implements ISubCommand
                     {
                         int x = Integer.parseInt(args[1]);
                         int z = Integer.parseInt(args[2]);
+                        Labyrinth.instance.logger.info("Spawning a mini labyrinth at (" + player.getPosition().getX() + ", " + player.getPosition().getY() + ", " + player.getPosition().getZ() + ") in dimension " + player.dimension + " on behalf of " + player.getName());
                         spawnMini(player.getEntityWorld(), player.getPosition(), x, z);
                     }
                     catch (NumberFormatException e)
@@ -52,7 +53,6 @@ public class CommandSpawnMini implements ISubCommand
 
     private void spawnMini(World world, BlockPos pos, int x, int z)
     {
-        System.out.println("Spawning...");
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < 16; j++)
@@ -65,6 +65,5 @@ public class CommandSpawnMini implements ISubCommand
                     world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.WOOL.getDefaultState());
             }
         }
-        System.out.println("Done.");
     }
 }
