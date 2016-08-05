@@ -52,7 +52,8 @@ public class LabyrinthWorldData extends WorldSavedData
     {
         for (String s : nbt.getKeySet())
         {
-            LabyrinthChunk chunk = new LabyrinthChunk();
+            String[] parts = s.split(",");
+            LabyrinthChunk chunk = new LabyrinthChunk(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
             chunk.readFromNBT(nbt.getCompoundTag(s));
             dataMap.put(s, chunk);
         }

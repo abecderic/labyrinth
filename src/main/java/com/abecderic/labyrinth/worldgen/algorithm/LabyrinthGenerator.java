@@ -12,6 +12,8 @@ public class LabyrinthGenerator
 {
     private static final int EDGE_EXIT_CHANCE = 4;
     private static final int SPECIAL_ROOMS_ITERATIONS = 32;
+    private static final int DOUBLE_ROOM_ITERATIONS = 4;
+    private static final int TRIPLE_ROOM_ITERATIONS = 4;
     private static final int X = 16;
     private static final int Z = 16;
     private Cell[][] cells;
@@ -44,15 +46,15 @@ public class LabyrinthGenerator
             {
                 if (i == 0)
                 {
-                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), random.nextInt(EDGE_EXIT_CHANCE) == 0);
+                    chunks[i][j] = new LabyrinthChunk(i, j, cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), random.nextInt(EDGE_EXIT_CHANCE) == 0);
                 }
                 else if (j == 0)
                 {
-                    chunks[i][j] = new LabyrinthChunk(random.nextInt(EDGE_EXIT_CHANCE) == 0, cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
+                    chunks[i][j] = new LabyrinthChunk(i, j, random.nextInt(EDGE_EXIT_CHANCE) == 0, cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
                 }
                 else
                 {
-                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
+                    chunks[i][j] = new LabyrinthChunk(i, j, cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
                 }
             }
         }
@@ -69,13 +71,27 @@ public class LabyrinthGenerator
                 List<LabyrinthChunk> largest = getLargestList(north, south, east, west);
                 if (largest == north || largest == south)
                 {
-                    fillList(largest, false);
+                    fillList(largest, chunks, false);
                 }
                 else
                 {
-                    fillList(largest, true);
+                    fillList(largest, chunks, true);
                 }
             }
+        }
+        for (int i = 0; i < DOUBLE_ROOM_ITERATIONS; i++)
+        {
+            int x = random.nextInt(X);
+            int z = random.nextInt(Z);
+            if (checkSquare(chunks, x, z, 2))
+                fillSquare(chunks, x, z, 2, LabyrinthChunk.Size.DOUBLE);
+        }
+        for (int i = 0; i < TRIPLE_ROOM_ITERATIONS; i++)
+        {
+            int x = random.nextInt(X);
+            int z = random.nextInt(Z);
+            if (checkSquare(chunks, x, z, 3))
+                fillSquare(chunks, x, z, 3, LabyrinthChunk.Size.TRIPLE);
         }
         return chunks;
     }
@@ -127,7 +143,7 @@ public class LabyrinthGenerator
         return largest;
     }
 
-    private void fillList(List<LabyrinthChunk> list, boolean xAxis)
+    private void fillList(List<LabyrinthChunk> list, LabyrinthChunk[][] chunks, boolean xAxis)
     {
         if (list.size() > 4)
         {
@@ -138,6 +154,48 @@ public class LabyrinthGenerator
             for (LabyrinthChunk chunk : list)
             {
                 chunk.setSize(LabyrinthChunk.Size.values()[list.size() - 1 + (xAxis ? 0 : 4)]);
+                if (xAxis && chunk.getX() > 0 && list.contains(chunks[chunk.getX() - 1][chunk.getZ()]))
+                {
+                    chunk.setWest(LabyrinthChunk.WallType.OPEN);
+                }
+                if (!xAxis && chunk.getZ() > 0 && list.contains(chunks[chunk.getX()][chunk.getZ() - 1]))
+                {
+                    chunk.setNorth(LabyrinthChunk.WallType.OPEN);
+                }
+            }
+        }
+    }
+
+    private boolean checkSquare(LabyrinthChunk[][] chunks, int x, int z, int size)
+    {
+        if (x + size - 1 > X) return false;
+        if (z + size - 1 > Z) return false;
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                if (chunks[x + i][z + j].getSize() != LabyrinthChunk.Size.SINGLE)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void fillSquare(LabyrinthChunk[][] chunks, int x, int z, int size, LabyrinthChunk.Size chunkSize)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                chunks[x + i][z + j].setSize(chunkSize);
+                if (i > 0)
+                {
+                    chunks[x + i][z + j].setWest(LabyrinthChunk.WallType.OPEN);
+                }
+                if (j > 0)
+                {
+                    chunks[x + i][z + j].setNorth(LabyrinthChunk.WallType.OPEN);
+                }
             }
         }
     }

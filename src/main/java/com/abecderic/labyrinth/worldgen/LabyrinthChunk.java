@@ -4,19 +4,25 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class LabyrinthChunk
 {
+    private int x;
+    private int z;
     private WallType north;
     private WallType west;
     private Size size;
 
-    public LabyrinthChunk()
+    public LabyrinthChunk(int x, int z)
     {
+        this.x = x;
+        this.z = z;
         north = WallType.WALL;
         west = WallType.WALL;
         size = Size.SINGLE;
     }
 
-    public LabyrinthChunk(boolean exitNorth, boolean exitWest)
+    public LabyrinthChunk(int x, int z, boolean exitNorth, boolean exitWest)
     {
+        this.x = x;
+        this.z = z;
         north = WallType.WALL;
         west = WallType.WALL;
         size = Size.SINGLE;
@@ -37,6 +43,16 @@ public class LabyrinthChunk
         nbt.setByte("wallWest", (byte)west.ordinal());
         nbt.setByte("size", (byte)size.ordinal());
         return nbt;
+    }
+
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getZ()
+    {
+        return z;
     }
 
     public WallType getNorth()

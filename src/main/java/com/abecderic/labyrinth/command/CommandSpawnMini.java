@@ -68,10 +68,14 @@ public class CommandSpawnMini implements ISubCommand
                 world.setBlockState(pos.add(2 * i, -1, 2 * j), Blocks.WOOL.getDefaultState());
                 if (chunk.getNorth() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.WOOL.getDefaultState());
+                else if (chunk.getNorth() == LabyrinthChunk.WallType.OPEN)
+                    world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, getColorForSize(chunk.getSize())));
                 else
                     world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.GRAY));
                 if (chunk.getWest() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.WOOL.getDefaultState());
+                else if (chunk.getWest() == LabyrinthChunk.WallType.OPEN)
+                    world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, getColorForSize(chunk.getSize())));
                 else
                     world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.GRAY));
                 world.setBlockState(pos.add(2 * i + 1, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, getColorForSize(chunk.getSize())));
