@@ -168,8 +168,8 @@ public class LabyrinthGenerator
 
     private boolean checkSquare(LabyrinthChunk[][] chunks, int x, int z, int size)
     {
-        if (x + size - 1 > X) return false;
-        if (z + size - 1 > Z) return false;
+        if (x + size > X) return false;
+        if (z + size > Z) return false;
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
