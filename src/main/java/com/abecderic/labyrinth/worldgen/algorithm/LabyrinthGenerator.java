@@ -1,104 +1,81 @@
 package com.abecderic.labyrinth.worldgen.algorithm;
 
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
+import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class LabyrinthGenerator
 {
     private static final int EDGE_EXIT_CHANCE = 4;
+    private static final int X = 16;
+    private static final int Z = 16;
+    private Cell[][] cells;
+    private List<EnumFacing> directions = new ArrayList<EnumFacing>();
     private static LabyrinthGenerator instance;
+
+    public LabyrinthGenerator()
+    {
+        directions.add(EnumFacing.NORTH);
+        directions.add(EnumFacing.EAST);
+        directions.add(EnumFacing.SOUTH);
+        directions.add(EnumFacing.WEST);
+    }
 
     public LabyrinthChunk[][] createLabyrinth(Random random)
     {
-        LabyrinthChunkWrapper[][] grid = new LabyrinthChunkWrapper[16][16];
-        for (int i = 0; i < 16; i++)
+        cells = new Cell[X][Z];
+        for (int i = 0; i < X; i++)
         {
-            for (int j = 0; j < 16; j++)
+            for (int j = 0; j < Z; j++)
             {
-                grid[i][j] = new LabyrinthChunkWrapper();
+                cells[i][j] = new Cell();
             }
         }
-
-        List<Wall> wallList = new ArrayList<Wall>();
-        int i = 0;//random.nextInt(16);
-        int j = 0;//random.nextInt(16);
-        LabyrinthChunkWrapper cell = grid[i][j];
-        cell.setPartOfLabyrinth(true);
-        addWallsOfCell(i, j, wallList);
-
-        while (wallList.size() > 0)
+        createLabyrinth(0, 0);
+        LabyrinthChunk[][] chunks = new LabyrinthChunk[X][Z];
+        for (int i = 0; i < X; i++)
         {
-            i = random.nextInt(wallList.size());
-            Wall wall = wallList.get(i);
-            if (!wall.facing()) /* west */
+            for (int j = 0; j < Z; j++)
             {
-                if (wall.getX() == 0) /* west edge of l-region */
+                if (i == 0)
                 {
-                    if (random.nextInt(EDGE_EXIT_CHANCE) == 0)
-                    {
-                        grid[wall.getX()][wall.getZ()].getChunk().setWest(LabyrinthChunk.WallType.EXIT);
-                    }
+                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), random.nextInt(EDGE_EXIT_CHANCE) == 0, false, false);
                 }
-                else if (!grid[wall.getX()][wall.getZ()].isPartOfLabyrinth() && grid[wall.getX() - 1][wall.getZ()].isPartOfLabyrinth())
+                else if (j == 0)
                 {
-                    grid[wall.getX()][wall.getZ()].setPartOfLabyrinth(true);
-                    grid[wall.getX() - 1][wall.getZ()].getChunk().setWest(LabyrinthChunk.WallType.EXIT);
-                    addWallsOfCell(wall.getX(), wall.getZ(), wallList);
+                    chunks[i][j] = new LabyrinthChunk(random.nextInt(EDGE_EXIT_CHANCE) == 0, cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2), false, false);
                 }
-                else if (grid[wall.getX()][wall.getZ()].isPartOfLabyrinth() && !grid[wall.getX() - 1][wall.getZ()].isPartOfLabyrinth())
+                else
                 {
-                    grid[wall.getX() - 1][wall.getZ()].setPartOfLabyrinth(true);
-                    grid[wall.getX() - 1][wall.getZ()].getChunk().setWest(LabyrinthChunk.WallType.EXIT);
-                    addWallsOfCell(wall.getX() - 1, wall.getZ(), wallList);
+                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2), false, false);
                 }
-            }
-            else /* north */
-            {
-                if (wall.getZ() == 0) /* north edge of l-region */
-                {
-                    if (random.nextInt(EDGE_EXIT_CHANCE) == 0)
-                    {
-                        grid[wall.getX()][wall.getZ()].getChunk().setNorth(LabyrinthChunk.WallType.EXIT);
-                    }
-                }
-                else if (!grid[wall.getX()][wall.getZ()].isPartOfLabyrinth() && grid[wall.getX()][wall.getZ() - 1].isPartOfLabyrinth())
-                {
-                    grid[wall.getX()][wall.getZ()].setPartOfLabyrinth(true);
-                    grid[wall.getX()][wall.getZ() - 1].getChunk().setNorth(LabyrinthChunk.WallType.EXIT);
-                    addWallsOfCell(wall.getX(), wall.getZ(), wallList);
-                }
-                else if (grid[wall.getX()][wall.getZ()].isPartOfLabyrinth() && !grid[wall.getX()][wall.getZ() - 1].isPartOfLabyrinth())
-                {
-                    grid[wall.getX()][wall.getZ() - 1].setPartOfLabyrinth(true);
-                    grid[wall.getX()][wall.getZ() - 1].getChunk().setNorth(LabyrinthChunk.WallType.EXIT);
-                    addWallsOfCell(wall.getX(), wall.getZ() - 1, wallList);
-                }
-            }
-            wallList.remove(i);
-        }
-
-        LabyrinthChunk[][] chunks = new LabyrinthChunk[16][16];
-        for (i = 0; i < 16; i++)
-        {
-            for (j = 0; j < 16; j++)
-            {
-                chunks[i][j] = grid[15 - i][j].getChunk();
             }
         }
         return chunks;
     }
 
-    private void addWallsOfCell(int x, int z, List<Wall> wallList)
+    public void createLabyrinth(int currentX, int currentZ)
     {
-        wallList.add(new Wall(x, z, true));
-        wallList.add(new Wall(x, z, false));
-        if (z < 15)
-            wallList.add(new Wall(x, z + 1, true));
-        if (x < 15)
-            wallList.add(new Wall(x + 1, z, false));
+        Collections.shuffle(directions);
+        EnumFacing[] dirs = directions.toArray(new EnumFacing[directions.size()]);
+        for (EnumFacing direction : dirs)
+        {
+            int newX = currentX + direction.getFrontOffsetX();
+            int newZ = currentZ + direction.getFrontOffsetZ();
+            if (newX >= 0 && newX < X && newZ >= 0 && newZ < Z)
+            {
+                if (!cells[newX][newZ].hasExits())
+                {
+                    cells[currentX][currentZ].addExit(direction.getIndex() - 2);
+                    cells[newX][newZ].addExit(direction.getOpposite().getIndex() - 2);
+                    createLabyrinth(newX, newZ);
+                }
+            }
+        }
     }
 
     public static LabyrinthGenerator getInstance()
