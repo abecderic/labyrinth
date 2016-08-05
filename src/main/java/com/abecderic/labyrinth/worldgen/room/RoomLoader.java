@@ -1,6 +1,7 @@
 package com.abecderic.labyrinth.worldgen.room;
 
 import com.abecderic.labyrinth.Labyrinth;
+import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -13,7 +14,7 @@ import java.util.*;
 public class RoomLoader
 {
     private Map<String, RoomInfo> roomInfos = new HashMap<String, RoomInfo>();
-    private List<String> weightedList = new ArrayList<String>();
+    private Map<LabyrinthChunk.Size, List<String>> weightedList = new HashMap<LabyrinthChunk.Size, List<String>>();
     private final Gson gson = new GsonBuilder().create();
     private String folder;
 
@@ -44,9 +45,16 @@ public class RoomLoader
         return roomInfos.containsKey(name) ? roomInfos.get(name) : null;
     }
 
-    public String getRoom(Random random)
+    public String getRoom(LabyrinthChunk.Size size, Random random)
     {
-        return weightedList.get(random.nextInt(weightedList.size()));
+        if (weightedList.containsKey(size))
+        {
+            return weightedList.get(size).get(random.nextInt(weightedList.get(size).size()));
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private void readInfo(String name)
@@ -96,8 +104,15 @@ public class RoomLoader
     private void readFileFromStream(String name, InputStream stream) throws IOException
     {
         RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
+        LabyrinthChunk.Size size = LabyrinthChunk.Size.valueOf(ri.size);
         roomInfos.put(name, ri);
+        if (weightedList.get(size) == null)
+        {
+            weightedList.put(size, new ArrayList<String>());
+        }
         for (int i = 0; i < ri.weight; i++)
-            weightedList.add(name);
+        {
+            weightedList.get(size).add(name);
+        }
     }
 }

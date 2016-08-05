@@ -24,11 +24,14 @@ public class RoomGenerator
 
     public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name)
     {
+        RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
         Template template = manager.getTemplate(world.getMinecraftServer(), new ResourceLocation("labyrinth:" + name));
         int structureX = chunkX * 16 + 1;
         int structureZ = chunkZ * 16 + 1;
-        template.addBlocksToWorld(world, new BlockPos(structureX, y, structureZ), new PlacementSettings());
-        RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
+        PlacementSettings settings = new PlacementSettings();
+
+        template.addBlocksToWorld(world, new BlockPos(structureX, y, structureZ), settings);
+
         if (ri != null)
         {
             if (ri.replacements != null)

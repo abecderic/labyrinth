@@ -72,9 +72,18 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public void populate(int x, int z)
     {
-        String name = Labyrinth.instance.roomLoader.getRoom(world.rand);
-        RoomGenerator.getInstance().generateRoomAt(world, x, 65, z, name);
-        Labyrinth.instance.worldData.getDataForChunk(x, z, null).setName(name);
+        LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z, world.rand);
+        if (chunk.getSize() != LabyrinthChunk.Size.SINGLE)
+        {
+            if (chunk.getNorth() == LabyrinthChunk.WallType.OPEN) return;
+            if (chunk.getWest() == LabyrinthChunk.WallType.OPEN) return;
+        }
+        String name = Labyrinth.instance.roomLoader.getRoom(chunk.getSize(), world.rand);
+        if (name != null)
+        {
+            RoomGenerator.getInstance().generateRoomAt(world, x, 65, z, name);
+            chunk.setName(name);
+        }
     }
 
     @Override
