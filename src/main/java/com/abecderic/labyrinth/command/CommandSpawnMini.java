@@ -90,9 +90,9 @@ public class CommandSpawnMini implements ISubCommand
             case X_2: return EnumDyeColor.PINK;
             case X_3: return EnumDyeColor.RED;
             case X_4: return EnumDyeColor.MAGENTA;
-            case Y_2: return EnumDyeColor.LIGHT_BLUE;
-            case Y_3: return EnumDyeColor.BLUE;
-            case Y_4: return EnumDyeColor.CYAN;
+            case Z_2: return EnumDyeColor.LIGHT_BLUE;
+            case Z_3: return EnumDyeColor.BLUE;
+            case Z_4: return EnumDyeColor.CYAN;
             case DOUBLE: return EnumDyeColor.YELLOW;
             case TRIPLE: return EnumDyeColor.ORANGE;
             default: return EnumDyeColor.BLACK;
