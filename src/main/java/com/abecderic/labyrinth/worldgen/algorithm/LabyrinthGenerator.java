@@ -43,15 +43,15 @@ public class LabyrinthGenerator
             {
                 if (i == 0)
                 {
-                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), random.nextInt(EDGE_EXIT_CHANCE) == 0, false, false);
+                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), random.nextInt(EDGE_EXIT_CHANCE) == 0);
                 }
                 else if (j == 0)
                 {
-                    chunks[i][j] = new LabyrinthChunk(random.nextInt(EDGE_EXIT_CHANCE) == 0, cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2), false, false);
+                    chunks[i][j] = new LabyrinthChunk(random.nextInt(EDGE_EXIT_CHANCE) == 0, cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
                 }
                 else
                 {
-                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2), false, false);
+                    chunks[i][j] = new LabyrinthChunk(cells[i][j].hasExit(EnumFacing.NORTH.getIndex() - 2), cells[i][j].hasExit(EnumFacing.WEST.getIndex() - 2));
                 }
             }
         }

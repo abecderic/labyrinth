@@ -24,6 +24,7 @@ public class CommandChunkInfo implements ISubCommand
                 player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo", x + "", z + ""));
                 LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z, sender.getEntityWorld().rand);
                 player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.walls", chunk.getNorth().toString().toLowerCase(), chunk.getWest().toString().toLowerCase()));
+                player.addChatComponentMessage(new TextComponentTranslation("command.chunkinfo.size", chunk.getSize().toString().toLowerCase()));
             }
             else
             {

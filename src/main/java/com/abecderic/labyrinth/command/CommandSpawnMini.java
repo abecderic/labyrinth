@@ -69,13 +69,29 @@ public class CommandSpawnMini implements ISubCommand
                 if (chunk.getNorth() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.WOOL.getDefaultState());
                 else
-                    world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
+                    world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.GRAY));
                 if (chunk.getWest() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.WOOL.getDefaultState());
                 else
-                    world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
-                world.setBlockState(pos.add(2 * i + 1, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.BLACK));
+                    world.setBlockState(pos.add(2 * i, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.GRAY));
+                world.setBlockState(pos.add(2 * i + 1, -1, 2 * j + 1), Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, getColorForSize(chunk.getSize())));
             }
+        }
+    }
+
+    private EnumDyeColor getColorForSize(LabyrinthChunk.Size size)
+    {
+        switch (size)
+        {
+            case X_2: return EnumDyeColor.PINK;
+            case X_3: return EnumDyeColor.RED;
+            case X_4: return EnumDyeColor.MAGENTA;
+            case Y_2: return EnumDyeColor.LIGHT_BLUE;
+            case Y_3: return EnumDyeColor.BLUE;
+            case Y_4: return EnumDyeColor.CYAN;
+            case DOUBLE: return EnumDyeColor.YELLOW;
+            case TRIPLE: return EnumDyeColor.ORANGE;
+            default: return EnumDyeColor.BLACK;
         }
     }
 }

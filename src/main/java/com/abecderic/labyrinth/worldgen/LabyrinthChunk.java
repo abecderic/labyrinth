@@ -6,33 +6,36 @@ public class LabyrinthChunk
 {
     private WallType north;
     private WallType west;
+    private Size size;
 
     public LabyrinthChunk()
     {
         north = WallType.WALL;
         west = WallType.WALL;
+        size = Size.SINGLE;
     }
 
-    public LabyrinthChunk(boolean exitNorth, boolean exitWest, boolean connectionNorth, boolean connectionWest)
+    public LabyrinthChunk(boolean exitNorth, boolean exitWest)
     {
         north = WallType.WALL;
         west = WallType.WALL;
+        size = Size.SINGLE;
         if (exitNorth) north = WallType.EXIT;
         if (exitWest) west = WallType.EXIT;
-        if (connectionNorth) north = WallType.OPEN;
-        if (connectionWest) west = WallType.OPEN;
     }
 
     public void readFromNBT(NBTTagCompound nbt)
     {
         north = WallType.values()[nbt.getByte("wallNorth")];
         west = WallType.values()[nbt.getByte("wallWest")];
+        size = Size.values()[nbt.getByte("size")];
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         nbt.setByte("wallNorth", (byte)north.ordinal());
         nbt.setByte("wallWest", (byte)west.ordinal());
+        nbt.setByte("size", (byte)size.ordinal());
         return nbt;
     }
 
@@ -56,10 +59,33 @@ public class LabyrinthChunk
         this.west = west;
     }
 
+    public Size getSize()
+    {
+        return size;
+    }
+
+    public void setSize(Size size)
+    {
+        this.size = size;
+    }
+
     public enum WallType
     {
         WALL,
         EXIT,
         OPEN;
+    }
+
+    public enum Size
+    {
+        SINGLE,
+        X_2,
+        X_3,
+        X_4,
+        DOUBLE,
+        Y_2,
+        Y_3,
+        Y_4,
+        TRIPLE;
     }
 }
