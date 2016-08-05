@@ -1,11 +1,13 @@
 package com.abecderic.labyrinth.util;
 
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
+import com.abecderic.labyrinth.worldgen.algorithm.LabyrinthGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class LabyrinthWorldData extends WorldSavedData
 {
@@ -17,17 +19,27 @@ public class LabyrinthWorldData extends WorldSavedData
         dataMap = new HashMap<String, LabyrinthChunk>();
     }
 
-    public LabyrinthChunk getDataForChunk(int x, int z)
+    public LabyrinthChunk getDataForChunk(int x, int z, Random random)
     {
         String key = x + "," + z;
         LabyrinthChunk chunk = dataMap.get(key);
         if (chunk == null)
         {
-            //System.out.println("tried to get data for chunk " + key + "; generating data for region " + (x >> 4) + "," + (z >> 4));
-            chunk = new LabyrinthChunk(Math.random() < 0.5, Math.random() < 0.5, Math.random() < 0.2, Math.random() < 0.2);
+            System.out.println("tried to get data for chunk " + key + "; generating data for region " + (x >> 4) + "," + (z >> 4));
+            LabyrinthChunk[][] chunks = LabyrinthGenerator.getInstance().createLabyrinth(random);
+            for (int i = 0; i < 16; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    dataMap.put((x + i) + "," + (z + j), chunks[i][j]);
+                }
+            }
+            markDirty();
+            return getDataForChunk(x, z, random);
+            /*chunk = new LabyrinthChunk(Math.random() < 0.5, Math.random() < 0.5, Math.random() < 0.2, Math.random() < 0.2);
             dataMap.put(key, chunk);
             markDirty();
-            return chunk;
+            return chunk;*/
         }
         else
         {

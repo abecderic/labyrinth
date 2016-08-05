@@ -7,7 +7,11 @@ public class LabyrinthChunk
     private WallType north;
     private WallType west;
 
-    public LabyrinthChunk() {}
+    public LabyrinthChunk()
+    {
+        north = WallType.WALL;
+        west = WallType.WALL;
+    }
 
     public LabyrinthChunk(boolean exitNorth, boolean exitWest, boolean connectionNorth, boolean connectionWest)
     {
@@ -40,6 +44,16 @@ public class LabyrinthChunk
     public WallType getWest()
     {
         return west;
+    }
+
+    public void setNorth(WallType north)
+    {
+        this.north = north;
+    }
+
+    public void setWest(WallType west)
+    {
+        this.west = west;
     }
 
     public enum WallType

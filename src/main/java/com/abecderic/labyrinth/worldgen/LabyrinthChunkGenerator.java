@@ -34,7 +34,7 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
                 primer.setBlockState(i, 64, j, Blocks.BEDROCK.getDefaultState());
             }
         }
-        LabyrinthChunk data = Labyrinth.instance.worldData.getDataForChunk(x, z);
+        LabyrinthChunk data = Labyrinth.instance.worldData.getDataForChunk(x, z, world.rand);
         for (int j = 0; j < 7; j++)
         {
             primer.setBlockState(0, 65 + j, 0, Blocks.BEDROCK.getDefaultState());

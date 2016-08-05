@@ -64,7 +64,7 @@ public class CommandSpawnMini implements ISubCommand
                 world.setBlockState(pos.add(2 * i, -2, 2 * j + 1), Blocks.WOOL.getDefaultState());
                 world.setBlockState(pos.add(2 * i + 1, -2, 2 * j + 1), Blocks.WOOL.getDefaultState());
 
-                LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x + i, z + j);
+                LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x + i, z + j, world.rand);
                 world.setBlockState(pos.add(2 * i, -1, 2 * j), Blocks.WOOL.getDefaultState());
                 if (chunk.getNorth() == LabyrinthChunk.WallType.WALL)
                     world.setBlockState(pos.add(2 * i + 1, -1, 2 * j), Blocks.WOOL.getDefaultState());
