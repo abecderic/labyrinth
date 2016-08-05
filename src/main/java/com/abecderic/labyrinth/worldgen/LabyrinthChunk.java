@@ -114,9 +114,9 @@ public class LabyrinthChunk
         X_3,
         X_4,
         DOUBLE,
-        Y_2,
-        Y_3,
-        Y_4,
+        Z_2,
+        Z_3,
+        Z_4,
         TRIPLE;
     }
 }
