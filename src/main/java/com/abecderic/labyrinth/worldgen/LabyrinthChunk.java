@@ -9,6 +9,7 @@ public class LabyrinthChunk
     private WallType north;
     private WallType west;
     private Size size;
+    private String name;
 
     public LabyrinthChunk(int x, int z)
     {
@@ -17,6 +18,7 @@ public class LabyrinthChunk
         north = WallType.WALL;
         west = WallType.WALL;
         size = Size.SINGLE;
+        this.name = "null";
     }
 
     public LabyrinthChunk(int x, int z, boolean exitNorth, boolean exitWest)
@@ -28,6 +30,7 @@ public class LabyrinthChunk
         size = Size.SINGLE;
         if (exitNorth) north = WallType.EXIT;
         if (exitWest) west = WallType.EXIT;
+        this.name = "null";
     }
 
     public void readFromNBT(NBTTagCompound nbt)
@@ -35,13 +38,15 @@ public class LabyrinthChunk
         north = WallType.values()[nbt.getByte("wallNorth")];
         west = WallType.values()[nbt.getByte("wallWest")];
         size = Size.values()[nbt.getByte("size")];
+        name = nbt.getString("name");
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
-        nbt.setByte("wallNorth", (byte)north.ordinal());
-        nbt.setByte("wallWest", (byte)west.ordinal());
-        nbt.setByte("size", (byte)size.ordinal());
+        nbt.setByte("wallNorth", (byte) north.ordinal());
+        nbt.setByte("wallWest", (byte) west.ordinal());
+        nbt.setByte("size", (byte) size.ordinal());
+        nbt.setString("name", name);
         return nbt;
     }
 
@@ -83,6 +88,16 @@ public class LabyrinthChunk
     public void setSize(Size size)
     {
         this.size = size;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public enum WallType

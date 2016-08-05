@@ -20,7 +20,7 @@ public class LabyrinthWorldData extends WorldSavedData
         dataMap = new HashMap<String, LabyrinthChunk>();
     }
 
-    public LabyrinthChunk getDataForChunk(int x, int z, Random random)
+    public synchronized LabyrinthChunk getDataForChunk(int x, int z, Random random)
     {
         String key = x + "," + z;
         LabyrinthChunk chunk = dataMap.get(key);

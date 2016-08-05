@@ -20,7 +20,7 @@ public class LabyrinthGenerator
     private List<EnumFacing> directions = new ArrayList<EnumFacing>();
     private static LabyrinthGenerator instance;
 
-    public LabyrinthGenerator()
+    private LabyrinthGenerator()
     {
         directions.add(EnumFacing.NORTH);
         directions.add(EnumFacing.EAST);

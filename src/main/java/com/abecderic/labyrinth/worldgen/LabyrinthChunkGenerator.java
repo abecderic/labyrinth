@@ -2,6 +2,7 @@ package com.abecderic.labyrinth.worldgen;
 
 import com.abecderic.labyrinth.Labyrinth;
 import com.abecderic.labyrinth.config.Config;
+import com.abecderic.labyrinth.worldgen.room.RoomGenerator;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +72,11 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public void populate(int x, int z)
     {
-
+        int structureX = x * 16 + 1;
+        int structureZ = z * 16 + 1;
+        String name = "empty_stonebrick";
+        RoomGenerator.getInstance().generateRoomAt(world, new BlockPos(structureX, 65, structureZ), name);
+        Labyrinth.instance.worldData.getDataForChunk(x, z, null).setName(name);
     }
 
     @Override
