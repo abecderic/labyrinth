@@ -32,7 +32,7 @@ public class LabyrinthWorldData extends WorldSavedData
             {
                 for (int j = 0; j < 16; j++)
                 {
-                    dataMap.put((x + i) + "," + (z + j), chunks[i][j]);
+                    dataMap.put(((x >> 4) * 16 + i) + "," + ((z >> 4) * 16 + j), chunks[i][j]);
                 }
             }
             markDirty();
