@@ -43,11 +43,11 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         {
             for (int j = 0; j < 7; j++)
             {
-                if (data.getNorth() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || data.getNorth() != LabyrinthChunk.WallType.EXIT))
+                if (data.getNorth() != LabyrinthChunk.WallType.OPEN && (j == 0 || j > 3 || i < 7 || i > 9 || data.getNorth() != LabyrinthChunk.WallType.EXIT))
                 {
                     primer.setBlockState(i, 65 + j, 0, Blocks.CLAY.getDefaultState());
                 }
-                if (data.getWest() != LabyrinthChunk.WallType.OPEN && (j > 3 || i < 6 || i > 9 || data.getWest() != LabyrinthChunk.WallType.EXIT))
+                if (data.getWest() != LabyrinthChunk.WallType.OPEN && (j == 0 || j > 3 || i < 7 || i > 9 || data.getWest() != LabyrinthChunk.WallType.EXIT))
                 {
                     primer.setBlockState(0, 65 + j, i, Blocks.CLAY.getDefaultState());
                 }
