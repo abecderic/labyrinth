@@ -72,10 +72,8 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public void populate(int x, int z)
     {
-        int structureX = x * 16 + 1;
-        int structureZ = z * 16 + 1;
-        String name = "empty_stonebrick";
-        RoomGenerator.getInstance().generateRoomAt(world, new BlockPos(structureX, 65, structureZ), name);
+        String name = Labyrinth.instance.roomLoader.getRoom(world.rand);
+        RoomGenerator.getInstance().generateRoomAt(world, x, 65, z, name);
         Labyrinth.instance.worldData.getDataForChunk(x, z, null).setName(name);
     }
 

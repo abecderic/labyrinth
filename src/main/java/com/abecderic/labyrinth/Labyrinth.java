@@ -5,6 +5,7 @@ import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.proxy.CommonProxy;
 import com.abecderic.labyrinth.util.LabyrinthWorldData;
 import com.abecderic.labyrinth.worldgen.LabyrinthWorldProvider;
+import com.abecderic.labyrinth.worldgen.room.RoomLoader;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +30,7 @@ public class Labyrinth
     public static CommonProxy proxy;
 
     public Logger logger;
+    public RoomLoader roomLoader;
     public DimensionType dimensionType;
     public LabyrinthWorldData worldData;
 
@@ -36,6 +38,7 @@ public class Labyrinth
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = LogManager.getLogger(MODID);
+        roomLoader = new RoomLoader("assets/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
     }
 

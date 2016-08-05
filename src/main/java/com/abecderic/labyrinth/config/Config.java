@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth.config;
 
+import com.abecderic.labyrinth.Labyrinth;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
@@ -28,6 +29,9 @@ public class Config
         generateRoof = c.getBoolean("generateRoof", "general", false, "If the labyrinth should have a roof.");
         // TODO set this to false sometime
         sunlight = c.getBoolean("sunlight", "general", true, "If the sun should shine in the labyrinth dimension.");
+        Labyrinth.instance.roomLoader.init(c.getStringList("list", "rooms",
+                new String[]{"empty_stonebrick", "empty_wood", "cave"},
+                "A list of rooms in the labyrinth. Remove from here, if you don't want a room to spawn. Add here, if you added a room in a resource pack."));
 
         if (c.hasChanged())
             c.save();

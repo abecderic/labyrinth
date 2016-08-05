@@ -17,7 +17,9 @@ public class CommandSpawnRoom implements ISubCommand
             EntityPlayerMP player = (EntityPlayerMP)sender;
             if (args.length > 1)
             {
-                RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), player.getPosition(), args[1]);
+                int x = (int) Math.floor(player.getPosition().getX() / 16D);
+                int z = (int) Math.floor(player.getPosition().getZ() / 16D);
+                RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), x, player.getPosition().getY(), z, args[1]);
             }
             else
             {

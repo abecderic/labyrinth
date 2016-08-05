@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth.worldgen.room;
 
+import com.abecderic.labyrinth.Labyrinth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -7,18 +8,27 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RoomLoader
 {
-    private static Map<String, RoomInfo> roomInfos = new HashMap<String, RoomInfo>();
+    private Map<String, RoomInfo> roomInfos = new HashMap<String, RoomInfo>();
+    private List<String> weightedList = new ArrayList<String>();
     private final Gson gson = new GsonBuilder().create();
     private String folder;
 
     public RoomLoader(String folder)
     {
         this.folder = folder;
+    }
+
+    public void init(String[] rooms)
+    {
+        for (String room : rooms)
+        {
+            Labyrinth.instance.logger.info("Loading room: " + room);
+            roomInfos.put(room, getInfo(room));
+        }
     }
 
     public RoomInfo getInfo(String name)
@@ -32,6 +42,11 @@ public class RoomLoader
             readInfo(name);
         }
         return roomInfos.containsKey(name) ? roomInfos.get(name) : null;
+    }
+
+    public String getRoom(Random random)
+    {
+        return weightedList.get(random.nextInt(weightedList.size()));
     }
 
     private void readInfo(String name)
@@ -82,5 +97,7 @@ public class RoomLoader
     {
         RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
         roomInfos.put(name, ri);
+        for (int i = 0; i < ri.weight; i++)
+            weightedList.add(name);
     }
 }
