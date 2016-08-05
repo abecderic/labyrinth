@@ -6,3 +6,4 @@ command.chunkinfo.size=§7size: %s
 command.notinlabyrinth=§cThis command only works in the labyrinth.
 command.onlycreative=§cOnly usable by players in creative mode
 command.spawnmini.usage=§cUsage: labyrinth spawn-mini <chunkX> <chunkZ>
+command.spawnroom.usage=§cUsage: labyrinth spawn-room <name>
