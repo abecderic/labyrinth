@@ -11,6 +11,7 @@ import java.util.Random;
 public class LabyrinthGenerator
 {
     private static final int EDGE_EXIT_CHANCE = 4;
+    private static final int SPECIAL_ROOMS_ITERATIONS = 32;
     private static final int X = 16;
     private static final int Z = 16;
     private Cell[][] cells;
@@ -55,10 +56,31 @@ public class LabyrinthGenerator
                 }
             }
         }
+        for (int i = 0; i < SPECIAL_ROOMS_ITERATIONS; i++)
+        {
+            int x = random.nextInt(X);
+            int z = random.nextInt(Z);
+            if (chunks[x][z].getSize() == LabyrinthChunk.Size.SINGLE)
+            {
+                List<LabyrinthChunk> north = getSpecialRoomTo(x, z, cells, chunks, EnumFacing.NORTH);
+                List<LabyrinthChunk> south = getSpecialRoomTo(x, z, cells, chunks, EnumFacing.SOUTH);
+                List<LabyrinthChunk> east = getSpecialRoomTo(x, z, cells, chunks, EnumFacing.EAST);
+                List<LabyrinthChunk> west = getSpecialRoomTo(x, z, cells, chunks, EnumFacing.WEST);
+                List<LabyrinthChunk> largest = getLargestList(north, south, east, west);
+                if (largest == north || largest == south)
+                {
+                    fillList(largest, false);
+                }
+                else
+                {
+                    fillList(largest, true);
+                }
+            }
+        }
         return chunks;
     }
 
-    public void createLabyrinth(int currentX, int currentZ)
+    private void createLabyrinth(int currentX, int currentZ)
     {
         Collections.shuffle(directions);
         EnumFacing[] dirs = directions.toArray(new EnumFacing[directions.size()]);
@@ -74,6 +96,48 @@ public class LabyrinthGenerator
                     cells[newX][newZ].addExit(direction.getOpposite().getIndex() - 2);
                     createLabyrinth(newX, newZ);
                 }
+            }
+        }
+    }
+
+    private List<LabyrinthChunk> getSpecialRoomTo(int x, int z, Cell[][] cells, LabyrinthChunk[][] chunks, EnumFacing dir)
+    {
+        int newX = x + dir.getFrontOffsetX();
+        int newZ = z + dir.getFrontOffsetZ();
+        if (newX >= 0 && newX < X && newZ >= 0 && newZ < Z)
+        {
+            if (cells[x][z].hasExit(dir.getIndex() - 2) && chunks[newX][newZ].getSize() == LabyrinthChunk.Size.SINGLE)
+            {
+                List<LabyrinthChunk> room = getSpecialRoomTo(newX, newZ, cells, chunks, dir);
+                room.add(chunks[x][z]);
+                return room;
+            }
+        }
+        return new ArrayList<LabyrinthChunk>();
+    }
+
+    private List<LabyrinthChunk> getLargestList(List<LabyrinthChunk>... lists)
+    {
+        List<LabyrinthChunk> largest = new ArrayList<LabyrinthChunk>();
+        for (List<LabyrinthChunk> list : lists)
+        {
+            if (list.size() > largest.size())
+                largest = list;
+        }
+        return largest;
+    }
+
+    private void fillList(List<LabyrinthChunk> list, boolean xAxis)
+    {
+        if (list.size() > 4)
+        {
+            list = list.subList(0, 4);
+        }
+        if (list.size() > 1)
+        {
+            for (LabyrinthChunk chunk : list)
+            {
+                chunk.setSize(LabyrinthChunk.Size.values()[list.size() - 1 + (xAxis ? 0 : 4)]);
             }
         }
     }
