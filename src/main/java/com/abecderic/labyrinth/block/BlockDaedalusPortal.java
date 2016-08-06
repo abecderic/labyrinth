@@ -31,6 +31,8 @@ public class BlockDaedalusPortal extends Block
         super(Material.PORTAL);
         setRegistryName(LabyrinthBlocks.PORTAL);
         setLightLevel(1.0f);
+        setBlockUnbreakable();
+        setResistance(2000.0f);
         setTickRandomly(true);
     }
 
@@ -107,5 +109,11 @@ public class BlockDaedalusPortal extends Block
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
+    public int quantityDropped(Random random)
+    {
+        return 0;
     }
 }

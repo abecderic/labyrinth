@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockDaedalus extends Block
 {
@@ -25,8 +26,8 @@ public class BlockDaedalus extends Block
     {
         super(Material.ROCK);
         setRegistryName(LabyrinthBlocks.DAEDALUS);
-        setHardness(3.0f);
-        setResistance(5.0f);
+        setHardness(50.0f);
+        setResistance(2000.0f);
         setCreativeTab(CreativeTabs.SEARCH);
         setDefaultState(blockState.getBaseState().withProperty(DELTA, false));
     }
@@ -78,5 +79,11 @@ public class BlockDaedalus extends Block
     public int getMetaFromState(IBlockState state)
     {
         return (state.getValue(DELTA) ? 1 : 0);
+    }
+
+    @Override
+    public int quantityDropped(Random random)
+    {
+        return 0;
     }
 }

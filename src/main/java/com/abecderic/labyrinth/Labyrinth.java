@@ -42,7 +42,6 @@ public class Labyrinth
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        //--username=abecderic --uuid=75524963-1fb2-4062-8610-0fae858bd10c
         logger = LogManager.getLogger(MODID);
         roomLoader = new RoomLoader("assets/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
