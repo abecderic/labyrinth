@@ -1,13 +1,14 @@
 package com.abecderic.labyrinth.worldgen.room;
 
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
+import net.minecraft.util.Rotation;
 
 import java.util.List;
 
 public final class RoomInfo
 {
     public int weight;
-    public String size;
+    public LabyrinthChunk.Size[] size;
     public List<Replacement> replacements;
     public List<Transformation> transformations;
 
@@ -22,22 +23,22 @@ public final class RoomInfo
     {
         public String name;
         public Property[] properties;
+    }
 
-        public final class Property
-        {
-            public String name;
-            public String value;
-        }
+    public final class Property
+    {
+        public String name;
+        public String value;
     }
 
     public final class Transformation
     {
         public LabyrinthChunk.Size size;
-        public boolean exitNorth;
-        public boolean exitSouth;
-        public boolean exitWest;
-        public boolean exitEast;
+        public Boolean exitNorth;
+        public Boolean exitSouth;
+        public Boolean exitEast;
+        public Boolean exitWest;
         public String structure;
-        public String rotation;
+        public Rotation rotation;
     }
 }

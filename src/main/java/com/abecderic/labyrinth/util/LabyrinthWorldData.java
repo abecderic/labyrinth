@@ -1,6 +1,5 @@
 package com.abecderic.labyrinth.util;
 
-import com.abecderic.labyrinth.Labyrinth;
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import com.abecderic.labyrinth.worldgen.algorithm.LabyrinthGenerator;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +25,6 @@ public class LabyrinthWorldData extends WorldSavedData
         LabyrinthChunk chunk = dataMap.get(key);
         if (chunk == null)
         {
-            Labyrinth.instance.logger.info("tried to get data for chunk " + key + "; generating data for region " + (x >> 4) + "," + (z >> 4));
             LabyrinthChunk[][] chunks = LabyrinthGenerator.getInstance().createLabyrinth(random);
             for (int i = 0; i < 16; i++)
             {

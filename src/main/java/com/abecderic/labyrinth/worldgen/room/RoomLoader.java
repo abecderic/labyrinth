@@ -104,15 +104,17 @@ public class RoomLoader
     private void readFileFromStream(String name, InputStream stream) throws IOException
     {
         RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
-        LabyrinthChunk.Size size = LabyrinthChunk.Size.valueOf(ri.size);
         roomInfos.put(name, ri);
-        if (weightedList.get(size) == null)
+        for (LabyrinthChunk.Size size : ri.size)
         {
-            weightedList.put(size, new ArrayList<String>());
-        }
-        for (int i = 0; i < ri.weight; i++)
-        {
-            weightedList.get(size).add(name);
+            if (weightedList.get(size) == null)
+            {
+                weightedList.put(size, new ArrayList<String>());
+            }
+            for (int i = 0; i < ri.weight; i++)
+            {
+                weightedList.get(size).add(name);
+            }
         }
     }
 }
