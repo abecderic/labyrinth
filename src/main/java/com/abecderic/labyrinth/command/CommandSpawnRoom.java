@@ -14,16 +14,23 @@ public class CommandSpawnRoom implements ISubCommand
     {
         if (sender instanceof EntityPlayerMP)
         {
-            EntityPlayerMP player = (EntityPlayerMP)sender;
-            if (args.length > 1)
+            EntityPlayerMP player = (EntityPlayerMP) sender;
+            if (player.isCreative())
             {
-                int x = (int) Math.floor(player.getPosition().getX() / 16D);
-                int z = (int) Math.floor(player.getPosition().getZ() / 16D);
-                RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), x, player.getPosition().getY(), z, args[1]);
+                if (args.length > 1)
+                {
+                    int x = (int) Math.floor(player.getPosition().getX() / 16D);
+                    int z = (int) Math.floor(player.getPosition().getZ() / 16D);
+                    RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), x, player.getPosition().getY(), z, args[1]);
+                }
+                else
+                {
+                    sender.addChatMessage(new TextComponentTranslation("command.spawnroom.usage"));
+                }
             }
             else
             {
-                sender.addChatMessage(new TextComponentTranslation("command.spawnroom.usage"));
+                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
             }
         }
         else
