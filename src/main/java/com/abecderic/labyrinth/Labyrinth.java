@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth;
 
+import com.abecderic.labyrinth.block.LabyrinthBlocks;
 import com.abecderic.labyrinth.command.LabyrinthCommand;
 import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.proxy.CommonProxy;
@@ -40,6 +41,7 @@ public class Labyrinth
         logger = LogManager.getLogger(MODID);
         roomLoader = new RoomLoader("assets/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
+        LabyrinthBlocks.registerBlocks();
     }
 
     @Mod.EventHandler
@@ -47,6 +49,7 @@ public class Labyrinth
     {
         dimensionType = DimensionType.register("labyrinth", "_labyrinth", "labyrinth".hashCode(), LabyrinthWorldProvider.class, false);
         DimensionManager.registerDimension(Config.getConfig().dimId, dimensionType);
+        proxy.registerModels();
     }
 
     @Mod.EventHandler
