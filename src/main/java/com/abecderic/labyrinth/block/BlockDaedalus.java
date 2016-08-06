@@ -3,9 +3,12 @@ package com.abecderic.labyrinth.block;
 import com.abecderic.labyrinth.Labyrinth;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -16,6 +19,8 @@ import javax.annotation.Nullable;
 
 public class BlockDaedalus extends Block
 {
+    public static final PropertyBool DELTA = PropertyBool.create("delta");
+
     public BlockDaedalus()
     {
         super(Material.ROCK);
@@ -23,6 +28,7 @@ public class BlockDaedalus extends Block
         setHardness(3.0f);
         setResistance(5.0f);
         setCreativeTab(CreativeTabs.SEARCH);
+        setDefaultState(blockState.getBaseState().withProperty(DELTA, false));
     }
 
     @Override
@@ -34,7 +40,43 @@ public class BlockDaedalus extends Block
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        System.out.println("player " + playerIn.getName() + " clicked block");
+        if (!worldIn.isRemote)
+        {
+            if (playerIn.isCreative() && playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).getItem() == Items.STICK)
+            {
+                if (worldIn.getBlockState(pos).getValue(DELTA))
+                {
+                    worldIn.setBlockState(pos, state.withProperty(DELTA, false));
+                }
+                else
+                {
+                    worldIn.setBlockState(pos, state.withProperty(DELTA, true));
+                }
+            }
+            else if (state.getValue(DELTA) && worldIn.getBlockState(pos.add(0, -1, 0)).getBlock() == LabyrinthBlocks.daedalus)
+            {
+                worldIn.setBlockState(pos, LabyrinthBlocks.portal.getDefaultState());
+                worldIn.setBlockState(pos.add(0, -1, 0), LabyrinthBlocks.portal.getDefaultState());
+            }
+        }
         return true;
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, DELTA);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return getDefaultState().withProperty(DELTA, (meta & 1) == 1);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return (state.getValue(DELTA) ? 1 : 0);
     }
 }

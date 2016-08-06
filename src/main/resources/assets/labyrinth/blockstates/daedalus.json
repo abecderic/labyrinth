@@ -7,12 +7,21 @@
     {
       "bottom": "labyrinth:blocks/daedalus",
       "top": "labyrinth:blocks/daedalus",
-      "side": "labyrinth:blocks/daedalus_side"
+      "side": "labyrinth:blocks/daedalus"
     }
   },
   "variants":
   {
-    "normal": [{}],
+    "delta=true":
+    [
+      {
+        "textures":
+        {
+          "side": "labyrinth:blocks/daedalus_side"
+        }
+      }
+    ],
+    "delta=false": [{}],
     "inventory": [{}]
   }
 }

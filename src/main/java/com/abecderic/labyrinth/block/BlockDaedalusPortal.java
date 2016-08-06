@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -20,12 +22,14 @@ import java.util.Random;
 public class BlockDaedalusPortal extends Block
 {
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
+    protected static final AxisAlignedBB ENTITY_AABB = new AxisAlignedBB(-3.0D, -2.0D, -3.0D, 4.0D, 2.0D, 4.0D);
 
     public BlockDaedalusPortal()
     {
         super(Material.PORTAL);
         setRegistryName(LabyrinthBlocks.PORTAL);
         setLightLevel(1.0f);
+        setTickRandomly(true);
     }
 
     @Override
@@ -52,6 +56,27 @@ public class BlockDaedalusPortal extends Block
     }
 
     @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        super.updateTick(worldIn, pos, state, rand);
+        if (!worldIn.isRemote)
+        {
+            System.out.println("portal ticked");
+            if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() != LabyrinthBlocks.portal && worldIn.getBlockState(pos.add(0, -1, 0)).getBlock() == LabyrinthBlocks.portal)
+            {
+                System.out.println("is top block and has block below");
+                List<EntityLivingBase> list = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, ENTITY_AABB);
+                if (list.isEmpty())
+                {
+                    System.out.println("no entities");
+                    worldIn.setBlockState(pos, LabyrinthBlocks.daedalus.getDefaultState().withProperty(BlockDaedalus.DELTA, true));
+                    worldIn.setBlockState(pos.add(0, -1, 0), LabyrinthBlocks.daedalus.getDefaultState());
+                }
+            }
+        }
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
@@ -73,5 +98,11 @@ public class BlockDaedalusPortal extends Block
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
     {
         /* NO-OP */
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.TRANSLUCENT;
     }
 }
