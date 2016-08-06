@@ -109,14 +109,33 @@ public class LabyrinthChunk
 
     public enum Size
     {
-        SINGLE,
-        X_2,
-        X_3,
-        X_4,
-        DOUBLE,
-        Z_2,
-        Z_3,
-        Z_4,
-        TRIPLE;
+        SINGLE(1, 1),
+        X_2(2, 1),
+        X_3(3, 1),
+        X_4(4, 1),
+        DOUBLE(2, 2),
+        Z_2(1, 2),
+        Z_3(1, 3),
+        Z_4(1, 4),
+        TRIPLE(3, 3);
+
+        private int x;
+        private int z;
+
+        Size(int x, int z)
+        {
+            this.x = x;
+            this.z = z;
+        }
+
+        public int getX()
+        {
+            return x;
+        }
+
+        public int getZ()
+        {
+            return z;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.abecderic.labyrinth.worldgen.room;
 
 import com.abecderic.labyrinth.Labyrinth;
+import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -22,13 +23,44 @@ public class RoomGenerator
         manager = new TemplateManager("assets/labyrinth/structures/");
     }
 
-    public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name)
+    public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name, LabyrinthChunk.Size size, boolean exitNorth, boolean exitSouth, boolean exitEast, boolean exitWest)
     {
         RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
-        Template template = manager.getTemplate(world.getMinecraftServer(), new ResourceLocation("labyrinth:" + name));
-        int structureX = chunkX * 16 + 1;
-        int structureZ = chunkZ * 16 + 1;
         PlacementSettings settings = new PlacementSettings();
+        if (ri.transformations != null)
+        {
+            for (RoomInfo.Transformation t : ri.transformations)
+            {
+                if (transformationFits(t, size, exitNorth, exitSouth, exitEast, exitWest))
+                {
+                    name = addTransformation(t, settings, name);
+                    break;
+                }
+            }
+        }
+        Template template = manager.getTemplate(world.getMinecraftServer(), new ResourceLocation("labyrinth:" + name));
+
+        int structureX = chunkX * 16;
+        int structureZ = chunkZ * 16;
+        switch (settings.getRotation())
+        {
+            case CLOCKWISE_90:
+                structureX += size.getX() * 16 - 1;
+                structureZ += 1;
+                break;
+            case CLOCKWISE_180:
+                structureX += size.getX() * 16 - 1;
+                structureZ += size.getZ() * 16 - 1;
+                break;
+            case COUNTERCLOCKWISE_90:
+                structureX += 1;
+                structureZ += size.getZ() * 16 - 1;
+                break;
+            default:
+                structureX += 1;
+                structureZ += 1;
+                break;
+        }
 
         template.addBlocksToWorld(world, new BlockPos(structureX, y, structureZ), settings);
 
@@ -84,7 +116,7 @@ public class RoomGenerator
         IBlockState state = block.getDefaultState();
         if (blockWrapper.properties != null)
         {
-            for (RoomInfo.BlockWrapper.Property property : blockWrapper.properties)
+            for (RoomInfo.Property property : blockWrapper.properties)
             {
                 IProperty<?> p = block.getBlockState().getProperty(property.name);
                 if (p != null)
@@ -99,6 +131,30 @@ public class RoomGenerator
     private <T extends Comparable<T>> IBlockState addBlockStateProperty(IBlockState state, IProperty<T> property, String value)
     {
         return state.withProperty(property, property.parseValue(value).get());
+    }
+
+    private boolean transformationFits(RoomInfo.Transformation t, LabyrinthChunk.Size size, boolean exitNorth, boolean exitSouth, boolean exitEast, boolean exitWest)
+    {
+        if (t.size != null && t.size != size)
+            return false;
+        if (t.exitNorth != null && t.exitNorth != exitNorth)
+            return false;
+        if (t.exitSouth != null && t.exitSouth != exitSouth)
+            return false;
+        if (t.exitEast != null && t.exitEast != exitEast)
+            return false;
+        if (t.exitWest != null && t.exitWest != exitWest)
+            return false;
+        return true;
+    }
+
+    private String addTransformation(RoomInfo.Transformation t, PlacementSettings settings, String name)
+    {
+        if (t.structure != null)
+            name = t.structure;
+        if (t.rotation != null)
+            settings.setRotation(t.rotation);
+        return name;
     }
 
     public static RoomGenerator getInstance()

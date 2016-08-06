@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth.command;
 
+import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import com.abecderic.labyrinth.worldgen.room.RoomGenerator;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -17,11 +18,17 @@ public class CommandSpawnRoom implements ISubCommand
             EntityPlayerMP player = (EntityPlayerMP) sender;
             if (player.isCreative())
             {
-                if (args.length > 1)
+                if (args.length > 6)
                 {
                     int x = (int) Math.floor(player.getPosition().getX() / 16D);
                     int z = (int) Math.floor(player.getPosition().getZ() / 16D);
-                    RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), x, player.getPosition().getY(), z, args[1]);
+                    String name = args[1];
+                    LabyrinthChunk.Size size = LabyrinthChunk.Size.valueOf(args[2]);
+                    boolean exitNorth = args[3].equalsIgnoreCase("true");
+                    boolean exitSouth = args[4].equalsIgnoreCase("true");
+                    boolean exitEast = args[5].equalsIgnoreCase("true");
+                    boolean exitWest = args[6].equalsIgnoreCase("true");
+                    RoomGenerator.getInstance().generateRoomAt(player.getEntityWorld(), x, player.getPosition().getY(), z, name, size, exitNorth, exitSouth, exitEast, exitWest);
                 }
                 else
                 {

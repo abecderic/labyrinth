@@ -53,10 +53,6 @@ public class LabyrinthTeleporterPortal
             server.getPlayerList().transferPlayerToDimension(entity, Config.getConfig().dimId, new LabyrinthTeleporter((WorldServer) server.getEntityWorld()));
             entity.setPositionAndUpdate(destination.getX() + 0.5D, destination.getY() + 0.5D, destination.getZ() + 0.5D);
         }
-        for (Map.Entry<BlockPos, BlockPos> entry : destinationMap.entrySet())
-        {
-            System.out.println("pos " + entry.getKey().getX() + "," + entry.getKey().getY() + "," + entry.getKey().getZ() + " to " + entry.getValue().getX() + "," + entry.getValue().getY() + "," + entry.getValue().getZ());
-        }
     }
 
     public void invalidateDestination(BlockPos pos)
