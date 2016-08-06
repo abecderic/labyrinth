@@ -13,17 +13,23 @@ public class LabyrinthBlocks
 {
     public static final String DAEDALUS = "daedalus";
     public static Block daedalus;
+    public static final String PORTAL = "daedalusPortal";
+    public static Block portal;
 
     public static void registerBlocks()
     {
         daedalus = new BlockDaedalus();
         GameRegistry.register(daedalus);
         GameRegistry.register(new ItemBlock(daedalus).setRegistryName(daedalus.getRegistryName()));
+        portal = new BlockDaedalusPortal();
+        GameRegistry.register(portal);
+        GameRegistry.register(new ItemBlock(portal).setRegistryName(portal.getRegistryName()));
     }
 
     public static void registerModels()
     {
         registerModel(daedalus, DAEDALUS);
+        registerModel(portal, PORTAL);
     }
 
     private static void registerModel(Block block, String name)
