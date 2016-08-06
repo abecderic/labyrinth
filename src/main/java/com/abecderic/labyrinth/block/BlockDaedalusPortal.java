@@ -66,14 +66,11 @@ public class BlockDaedalusPortal extends Block
         super.updateTick(worldIn, pos, state, rand);
         if (!worldIn.isRemote)
         {
-            System.out.println("portal ticked");
             if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() != LabyrinthBlocks.portal && worldIn.getBlockState(pos.add(0, -1, 0)).getBlock() == LabyrinthBlocks.portal)
             {
-                System.out.println("is top block and has block below");
                 List<EntityLivingBase> list = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, ENTITY_AABB);
                 if (list.isEmpty())
                 {
-                    System.out.println("no entities");
                     worldIn.setBlockState(pos, LabyrinthBlocks.daedalus.getDefaultState().withProperty(BlockDaedalus.DELTA, true));
                     worldIn.setBlockState(pos.add(0, -1, 0), LabyrinthBlocks.daedalus.getDefaultState());
                     LabyrinthTeleporterPortal.getInstance().invalidateDestination(pos);
