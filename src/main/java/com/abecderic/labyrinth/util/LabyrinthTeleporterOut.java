@@ -16,6 +16,6 @@ public class LabyrinthTeleporterOut extends LabyrinthTeleporter
     @Override
     public void placeInPortal(Entity entityIn, float rotationYaw)
     {
-        entityIn.setPosition(world.getSpawnPoint().getX() + 0.5D, world.getSpawnPoint().getY() + 0.5D, world.getSpawnPoint().getZ() + 0.5D);
+        entityIn.setPositionAndUpdate(world.getSpawnPoint().getX() + 0.5D, world.getTopSolidOrLiquidBlock(world.getSpawnPoint()).getY() + 1.5D, world.getSpawnPoint().getZ() + 0.5D);
     }
 }
