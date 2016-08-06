@@ -7,13 +7,17 @@ import com.abecderic.labyrinth.proxy.CommonProxy;
 import com.abecderic.labyrinth.util.LabyrinthWorldData;
 import com.abecderic.labyrinth.worldgen.LabyrinthWorldProvider;
 import com.abecderic.labyrinth.worldgen.room.RoomLoader;
+import com.abecderic.labyrinth.worldgen.village.CreationHandler;
+import com.abecderic.labyrinth.worldgen.village.VillageWorkshop;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,6 +46,11 @@ public class Labyrinth
         roomLoader = new RoomLoader("assets/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
         LabyrinthBlocks.registerBlocks();
+
+        if (Config.getConfig().villageHouse)
+        {
+            MapGenStructureIO.registerStructureComponent(VillageWorkshop.class, "labyrinth:villageworkshop");
+        }
     }
 
     @Mod.EventHandler
@@ -50,6 +59,11 @@ public class Labyrinth
         dimensionType = DimensionType.register("labyrinth", "_labyrinth", "labyrinth".hashCode(), LabyrinthWorldProvider.class, false);
         DimensionManager.registerDimension(Config.getConfig().dimId, dimensionType);
         proxy.registerModels();
+
+        if (Config.getConfig().villageHouse)
+        {
+            VillagerRegistry.instance().registerVillageCreationHandler(new CreationHandler());
+        }
     }
 
     @Mod.EventHandler
