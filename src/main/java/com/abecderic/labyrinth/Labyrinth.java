@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class Labyrinth
 {
     public static final String MODID = "labyrinth";
-    public static final String MODNAME = "Labyrinth";
+    public static final String MODNAME = "Daedalus' Labyrinth";
     public static final String VERSION = "${version}";
 
     @Mod.Instance(value = Labyrinth.MODID)

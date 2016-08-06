@@ -1,11 +1,11 @@
 [
 {
   "modid": "labyrinth",
-  "name": "Labyrinth",
-  "description": "",
+  "name": "Daedalus' Labyrinth",
+  "description": "Explore the many rooms and corridors of Daedalus' labyrinth.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/abecderic/labyrinth",
   "updateUrl": "",
   "authorList": ["abecderic"],
   "credits": "",
