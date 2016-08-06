@@ -1,11 +1,13 @@
 package com.abecderic.labyrinth.block;
 
 import com.abecderic.labyrinth.Labyrinth;
+import com.abecderic.labyrinth.util.LabyrinthTeleporterPortal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -40,9 +42,12 @@ public class BlockDaedalusPortal extends Block
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-        if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.isNonBoss() && !worldIn.isRemote && entityIn.getEntityBoundingBox().intersectsWith(state.getBoundingBox(worldIn, pos).offset(pos)))
+        if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.isNonBoss() && !worldIn.isRemote && entityIn.getEntityBoundingBox().intersectsWith(state.getBoundingBox(worldIn, pos).offset(pos)) && entityIn instanceof EntityPlayerMP)
         {
-            // TODO tp
+            if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() != LabyrinthBlocks.portal)
+            {
+                LabyrinthTeleporterPortal.getInstance().teleportEntity(worldIn.getMinecraftServer(), pos, (EntityPlayerMP) entityIn);
+            }
         }
     }
 
@@ -71,6 +76,7 @@ public class BlockDaedalusPortal extends Block
                     System.out.println("no entities");
                     worldIn.setBlockState(pos, LabyrinthBlocks.daedalus.getDefaultState().withProperty(BlockDaedalus.DELTA, true));
                     worldIn.setBlockState(pos.add(0, -1, 0), LabyrinthBlocks.daedalus.getDefaultState());
+                    LabyrinthTeleporterPortal.getInstance().invalidateDestination(pos);
                 }
             }
         }
