@@ -6,12 +6,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.NumberInvalidException;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class RoomGenerator
 {
@@ -33,7 +42,7 @@ public class RoomGenerator
             {
                 if (transformationFits(t, size, exitNorth, exitSouth, exitEast, exitWest))
                 {
-                    name = addTransformation(t, settings, name);
+                    name = addTransformation(t, settings, name, world.rand);
                     break;
                 }
             }
@@ -42,6 +51,8 @@ public class RoomGenerator
 
         int structureX = chunkX * 16;
         int structureZ = chunkZ * 16;
+        int defaultStructureX = structureX + 1;
+        int defaultStructureZ = structureZ + 1;
         switch (settings.getRotation())
         {
             case CLOCKWISE_90:
@@ -72,7 +83,7 @@ public class RoomGenerator
                 {
                     try
                     {
-                        applyReplacement(world, structureX, y, structureZ, template, replacement);
+                        applyReplacement(world, defaultStructureX, y, defaultStructureZ, template, replacement);
                     }
                     catch (NumberInvalidException e)
                     {
@@ -85,15 +96,11 @@ public class RoomGenerator
 
     private void applyReplacement(World world, int x, int y, int z, Template template, RoomInfo.Replacement replacement) throws NumberInvalidException
     {
-        IBlockState originalState = getBlockState(replacement.original);
-        IBlockState replacementState;
+        IBlockState originalState = getBlockState(replacement.original, world.rand);
+        IBlockState replacementState = Blocks.AIR.getDefaultState();
         if (replacement.type.equalsIgnoreCase("all"))
         {
-            replacementState = getBlockState(replacement.replacement[world.rand.nextInt(replacement.replacement.length)]);
-        }
-        else
-        {
-            return;
+            replacementState = getBlockState(replacement.replacement[world.rand.nextInt(replacement.replacement.length)], world.rand);
         }
         for (int i = x; i < x + template.getSize().getX(); i++)
         {
@@ -105,27 +112,78 @@ public class RoomGenerator
                     {
                         world.setBlockState(new BlockPos(i, j, k), replacementState);
                     }
+                    else if (world.getBlockState(new BlockPos(i, j, k)) == originalState && replacement.type.equalsIgnoreCase("single"))
+                    {
+                        replacementState = getBlockState(replacement.replacement[world.rand.nextInt(replacement.replacement.length)], world.rand);
+                        world.setBlockState(new BlockPos(i, j, k), replacementState);
+                    }
                 }
             }
         }
     }
 
-    private IBlockState getBlockState(RoomInfo.BlockWrapper blockWrapper)
+    private IBlockState getBlockState(RoomInfo.BlockWrapper blockWrapper, Random rand)
     {
-        Block block = Block.REGISTRY.getObject(new ResourceLocation(blockWrapper.name));
-        IBlockState state = block.getDefaultState();
-        if (blockWrapper.properties != null)
+        if (blockWrapper.name.startsWith("-"))
         {
-            for (RoomInfo.Property property : blockWrapper.properties)
+            if (blockWrapper.name.startsWith("-ore:"))
             {
-                IProperty<?> p = block.getBlockState().getProperty(property.name);
-                if (p != null)
+                String oreName = blockWrapper.name.substring("-ore:".length());
+                List<ItemStack> list = OreDictionary.getOres(oreName);
+                for (int i = list.size() - 1; i >= 0; i--)
                 {
-                    state = addBlockStateProperty(state, p, property.value);
+                    if (!(list.get(i).getItem() instanceof ItemBlock))
+                    {
+                        list.remove(i);
+                    }
+                }
+                if (!list.isEmpty())
+                {
+                    ItemStack stack = list.get(rand.nextInt(list.size()));
+                    Block block = Block.getBlockFromItem(stack.getItem());
+                    if (block != null)
+                    {
+                        return block.getDefaultState();
+                    }
                 }
             }
+            else if (blockWrapper.name.startsWith("-ore-prefix:"))
+            {
+                String orePrefix = blockWrapper.name.substring("-ore-prefix:".length());
+                List<String> ores = new ArrayList<String>();
+                String[] oreDict = OreDictionary.getOreNames();
+                for (String ore : oreDict)
+                {
+                    if (ore.startsWith(orePrefix))
+                        ores.add(ore);
+                }
+                if (!ores.isEmpty())
+                {
+                    String ore = ores.get(rand.nextInt(ores.size()));
+                    RoomInfo.BlockWrapper bw = new RoomInfo.BlockWrapper();
+                    bw.name = "-ore:" + ore;
+                    return getBlockState(bw, rand);
+                }
+            }
+            return Blocks.AIR.getDefaultState();
         }
-        return state;
+        else
+        {
+            Block block = Block.REGISTRY.getObject(new ResourceLocation(blockWrapper.name));
+            IBlockState state = block.getDefaultState();
+            if (blockWrapper.properties != null)
+            {
+                for (RoomInfo.Property property : blockWrapper.properties)
+                {
+                    IProperty<?> p = block.getBlockState().getProperty(property.name);
+                    if (p != null)
+                    {
+                        state = addBlockStateProperty(state, p, property.value);
+                    }
+                }
+            }
+            return state;
+        }
     }
 
     private <T extends Comparable<T>> IBlockState addBlockStateProperty(IBlockState state, IProperty<T> property, String value)
@@ -148,12 +206,21 @@ public class RoomGenerator
         return true;
     }
 
-    private String addTransformation(RoomInfo.Transformation t, PlacementSettings settings, String name)
+    private String addTransformation(RoomInfo.Transformation t, PlacementSettings settings, String name, Random rand)
     {
         if (t.structure != null)
             name = t.structure;
         if (t.rotation != null)
-            settings.setRotation(t.rotation);
+        {
+            if (t.rotation.equalsIgnoreCase("any"))
+            {
+                settings.setRotation(Rotation.values()[rand.nextInt(Rotation.values().length)]);
+            }
+            else
+            {
+                settings.setRotation(Rotation.valueOf(t.rotation));
+            }
+        }
         return name;
     }
 
