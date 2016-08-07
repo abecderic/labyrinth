@@ -33,7 +33,7 @@ public class CommandSaveTemplate implements ISubCommand
                         int z2 = Integer.parseInt(args[6]);
                         String name = args[7];
                         BlockPos pos = new BlockPos(Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2));
-                        BlockPos size = new BlockPos(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2));
+                        BlockPos size = new BlockPos(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2)).add(1, 1, 1);
 
                         MinecraftServer minecraftserver = player.getServerWorld().getMinecraftServer();
                         TemplateManager templatemanager = player.getServerWorld().getStructureTemplateManager();
