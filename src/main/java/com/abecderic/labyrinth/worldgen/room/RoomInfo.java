@@ -7,6 +7,8 @@ import java.util.List;
 public final class RoomInfo
 {
     public int weight;
+    public Integer down;
+    public Integer up;
     public LabyrinthChunk.Size[] size;
     public List<Replacement> replacements;
     public List<Transformation> transformations;

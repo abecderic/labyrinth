@@ -27,7 +27,6 @@ public class RoomLoader
     {
         for (String room : rooms)
         {
-            Labyrinth.instance.logger.info("Loading room: " + room);
             roomInfos.put(room, getInfo(room));
         }
     }
@@ -76,6 +75,10 @@ public class RoomLoader
             {
                 e.printStackTrace();
             }
+            catch (NullPointerException e)
+            {
+                e.printStackTrace();
+            }
             finally
             {
                 IOUtils.closeQuietly(inputstream);
@@ -103,6 +106,7 @@ public class RoomLoader
 
     private void readFileFromStream(String name, InputStream stream) throws IOException
     {
+        Labyrinth.instance.logger.info("Reading room info for " + name);
         RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
         roomInfos.put(name, ri);
         for (LabyrinthChunk.Size size : ri.size)
