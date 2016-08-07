@@ -25,6 +25,7 @@ public class LabyrinthCommand implements ICommand
         subCommands.put("chunk-info", new CommandChunkInfo());
         subCommands.put("spawn-mini", new CommandSpawnMini());
         subCommands.put("spawn-room", new CommandSpawnRoom());
+        subCommands.put("save-template", new CommandSaveTemplate());
     }
 
     @Override

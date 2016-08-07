@@ -135,7 +135,8 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
     {
-        return null;
+        Biome biome = world.getBiomeGenForCoords(pos);
+        return biome.getSpawnableList(creatureType);
     }
 
     @Nullable

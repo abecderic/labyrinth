@@ -8,6 +8,7 @@ command.notinlabyrinth=§cThis command only works in the labyrinth.
 command.onlycreative=§cOnly usable by players in creative mode
 command.spawnmini.usage=§cUsage: labyrinth spawn-mini <chunkX> <chunkZ>
 command.spawnroom.usage=§cUsage: labyrinth spawn-room <name> <size> <exitNorth> <exitSouth> <exitEast> <exitWest>
+command.savetemplate.usage=§cUsage: labyrinth save-template <x1 y1 z1> <x2 y2 z2> <name>
 
 tile.labyrinth:daedalus.name=Daedalus Block
 tile.labyrinth:daedalusPortal.name=Daedalus Portal
