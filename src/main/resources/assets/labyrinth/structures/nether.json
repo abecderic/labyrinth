@@ -1,0 +1,15 @@
+{
+  "weight":1,
+  "size":
+  [
+    "Z_2",
+    "X_2"
+  ],
+  "transformations":
+  [
+    {
+      "size":"Z_2",
+      "rotation":"CLOCKWISE_90"
+    }
+  ]
+}

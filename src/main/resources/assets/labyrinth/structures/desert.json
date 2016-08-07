@@ -1,0 +1,15 @@
+{
+  "weight":1,
+  "size":
+  [
+    "Z_2",
+    "X_2"
+  ],
+  "transformations":
+  [
+    {
+      "size":"X_2",
+      "rotation":"COUNTERCLOCKWISE_90"
+    }
+  ]
+}
