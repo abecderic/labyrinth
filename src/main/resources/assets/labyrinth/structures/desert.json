@@ -2,14 +2,14 @@
   "weight":1,
   "size":
   [
-    "Z_2",
-    "X_2"
+    "Z_3",
+    "X_3"
   ],
   "transformations":
   [
     {
-      "size":"X_2",
-      "rotation":"COUNTERCLOCKWISE_90"
+      "size":"Z_3",
+      "rotation":"CLOCKWISE_90"
     }
   ]
 }

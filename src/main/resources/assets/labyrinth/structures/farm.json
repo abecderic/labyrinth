@@ -1,5 +1,6 @@
 {
   "weight":1,
+  "up":8,
   "size":
   [
     "SINGLE"
@@ -15,46 +16,18 @@
     {
       "original":
       {
-        "name":"minecraft:wheat",
-        "properties":
-        [
-          {
-            "name":"age",
-            "value":0
-          }
-        ]
+        "name":"minecraft:red_flower"
       },
       "replacement":
       [
         {
-          "name":"minecraft:wheat",
-          "properties":
-          [
-            {
-              "name":"age",
-              "value":7
-            }
-          ]
+          "name":"minecraft:wheat"
         },
         {
-          "name":"minecraft:carrots",
-          "properties":
-          [
-            {
-              "name":"age",
-              "value":7
-            }
-          ]
+          "name":"minecraft:carrots"
         },
         {
-          "name":"minecraft:potatoes",
-          "properties":
-          [
-            {
-              "name":"age",
-              "value":7
-            }
-          ]
+          "name":"minecraft:potatoes"
         }
       ],
       "type":"all"

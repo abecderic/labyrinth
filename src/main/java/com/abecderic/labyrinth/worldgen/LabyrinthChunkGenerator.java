@@ -39,11 +39,9 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
 
         ChunkPrimer primer = new ChunkPrimer();
         int y = 64;
-        int down = 0;
         if (ri != null && ri.down != null && ri.down > 0)
         {
             y -= ri.down;
-            down = ri.down;
         }
         for (int i = 0; i < 16; i++)
         {
@@ -71,11 +69,9 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
             }
         }
         int h = 72;
-        int up = 0;
         if (ri != null && ri.up != null && ri.up > 0)
         {
             h += ri.up;
-            up = ri.up;
         }
         if (Config.getConfig().generateRoof)
         {
