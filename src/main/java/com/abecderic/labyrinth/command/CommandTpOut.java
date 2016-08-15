@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth.command;
 
+import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.util.LabyrinthTeleporterOut;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -15,8 +16,22 @@ public class CommandTpOut implements ISubCommand
     {
         if (sender instanceof EntityPlayerMP)
         {
-            EntityPlayerMP player = (EntityPlayerMP)sender;
-            server.getPlayerList().transferPlayerToDimension(player, 0, new LabyrinthTeleporterOut((WorldServer) server.getEntityWorld()));
+            EntityPlayerMP player = (EntityPlayerMP) sender;
+            if (player.isCreative())
+            {
+                if (player.dimension == Config.getConfig().dimId)
+                {
+                    server.getPlayerList().transferPlayerToDimension(player, 0, new LabyrinthTeleporterOut((WorldServer) server.getEntityWorld()));
+                }
+                else
+                {
+                    sender.addChatMessage(new TextComponentTranslation("command.notinlabyrinth"));
+                }
+            }
+            else
+            {
+                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
+            }
         }
         else
         {

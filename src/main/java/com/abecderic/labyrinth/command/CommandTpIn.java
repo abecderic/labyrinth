@@ -17,7 +17,17 @@ public class CommandTpIn implements ISubCommand
         if (sender instanceof EntityPlayerMP)
         {
             EntityPlayerMP player = (EntityPlayerMP)sender;
-            server.getPlayerList().transferPlayerToDimension(player, Config.getConfig().dimId, new LabyrinthTeleporter((WorldServer) server.getEntityWorld()));
+            if (player.isCreative())
+            {
+                if (player.dimension == 0)
+                {
+                    server.getPlayerList().transferPlayerToDimension(player, Config.getConfig().dimId, new LabyrinthTeleporter((WorldServer) server.getEntityWorld()));
+                }
+                else
+                {
+                    sender.addChatMessage(new TextComponentTranslation("command.notinoverworld"));
+                }
+            }
         }
         else
         {
