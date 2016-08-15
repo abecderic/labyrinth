@@ -48,7 +48,10 @@ public class BlockDaedalusPortal extends Block
         {
             if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() != LabyrinthBlocks.portal)
             {
-                LabyrinthTeleporterPortal.getInstance().teleportEntity(worldIn.getMinecraftServer(), pos, (EntityPlayerMP) entityIn);
+                if (entityIn.motionX == 0.0f && entityIn.motionY == 0.0f && entityIn.motionZ == 0.0f)
+                {
+                    LabyrinthTeleporterPortal.getInstance().teleportEntity(worldIn.getMinecraftServer(), pos, (EntityPlayerMP) entityIn);
+                }
             }
         }
     }

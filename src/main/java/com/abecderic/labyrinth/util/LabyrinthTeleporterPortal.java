@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class LabyrinthTeleporterPortal
 {
-    private static final int DESTINATION_DELAY = 60000;
     private static LabyrinthTeleporterPortal instance;
     private Map<BlockPos, BlockPos> destinationMap = new HashMap<BlockPos, BlockPos>();
     private Random r = new Random();
@@ -53,6 +52,7 @@ public class LabyrinthTeleporterPortal
             server.getPlayerList().transferPlayerToDimension(entity, Config.getConfig().dimId, new LabyrinthTeleporter((WorldServer) server.getEntityWorld()));
             entity.setPositionAndUpdate(destination.getX() + 0.5D, destination.getY() + 0.5D, destination.getZ() + 0.5D);
         }
+        entity.connection.update();
     }
 
     public void invalidateDestination(BlockPos pos)
