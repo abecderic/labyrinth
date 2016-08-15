@@ -93,20 +93,15 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     public void populate(int x, int z)
     {
         LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z, world.rand);
+        boolean spawnRoom = true;
         if (chunk.getSize() != LabyrinthChunk.Size.SINGLE)
         {
-            if (chunk.getNorth() == LabyrinthChunk.WallType.OPEN) return;
-            if (chunk.getWest() == LabyrinthChunk.WallType.OPEN) return;
+            if (chunk.getNorth() == LabyrinthChunk.WallType.OPEN) spawnRoom = false;
+            if (chunk.getWest() == LabyrinthChunk.WallType.OPEN) spawnRoom = false;
         }
         String name = chunk.getName();
         if (name != null && !name.equalsIgnoreCase("null"))
         {
-            boolean exitNorth = chunk.getNorth() != LabyrinthChunk.WallType.WALL;
-            boolean exitSouth = Labyrinth.instance.worldData.getDataForChunk(x, z + 1, world.rand).getNorth() != LabyrinthChunk.WallType.WALL;
-            boolean exitEast = Labyrinth.instance.worldData.getDataForChunk(x + 1, z, world.rand).getWest() != LabyrinthChunk.WallType.WALL;
-            boolean exitWest = chunk.getWest() != LabyrinthChunk.WallType.WALL;
-            RoomGenerator.getInstance().generateRoomAt(world, x, 65, z, name, chunk.getSize(), exitNorth, exitSouth, exitEast, exitWest);
-
             RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
             int down = 0;
             if (ri != null && ri.down != null && ri.down > 0)
@@ -119,6 +114,15 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
                 up = ri.up;
             }
             extendWalls(x, z, up, down);
+
+            if (spawnRoom)
+            {
+                boolean exitNorth = chunk.getNorth() != LabyrinthChunk.WallType.WALL;
+                boolean exitSouth = Labyrinth.instance.worldData.getDataForChunk(x, z + 1, world.rand).getNorth() != LabyrinthChunk.WallType.WALL;
+                boolean exitEast = Labyrinth.instance.worldData.getDataForChunk(x + 1, z, world.rand).getWest() != LabyrinthChunk.WallType.WALL;
+                boolean exitWest = chunk.getWest() != LabyrinthChunk.WallType.WALL;
+                RoomGenerator.getInstance().generateRoomAt(world, x, 65, z, name, chunk.getSize(), exitNorth, exitSouth, exitEast, exitWest);
+            }
         }
     }
 
