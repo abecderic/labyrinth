@@ -28,6 +28,8 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public Chunk provideChunk(int x, int z)
     {
+        if (Labyrinth.instance.worldData == null)
+            Labyrinth.instance.loadWorldData(world.getMinecraftServer());
         LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z, world.rand);
         String name = Labyrinth.instance.roomLoader.getRoom(chunk.getSize(), world.rand);
         RoomInfo ri = null;
