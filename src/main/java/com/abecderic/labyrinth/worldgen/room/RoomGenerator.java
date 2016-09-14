@@ -134,11 +134,13 @@ public class RoomGenerator
             if (blockWrapper.name.startsWith("-ore:"))
             {
                 String oreName = blockWrapper.name.substring("-ore:".length());
-                List<ItemStack> list = OreDictionary.getOres(oreName);
+                List<ItemStack> unmodifiableList = OreDictionary.getOres(oreName);
+                List<ItemStack> list = new ArrayList<ItemStack>(unmodifiableList);
                 for (int i = list.size() - 1; i >= 0; i--)
                 {
                     if (!(list.get(i).getItem() instanceof ItemBlock))
                     {
+                        System.out.println("removed:" + list.get(i).getItem().getUnlocalizedName());
                         list.remove(i);
                     }
                 }
