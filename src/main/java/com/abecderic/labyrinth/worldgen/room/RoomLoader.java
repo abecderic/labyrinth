@@ -29,7 +29,7 @@ public class RoomLoader
         {
             roomInfos.put(room, getInfo(room));
         }
-        Labyrinth.instance.logger.info("Read " + rooms.length + " rooms");
+        Labyrinth.instance.logger.info("Finished reading all rooms");
     }
 
     public RoomInfo getInfo(String name)
@@ -107,18 +107,25 @@ public class RoomLoader
 
     private void readFileFromStream(String name, InputStream stream) throws IOException
     {
-        Labyrinth.instance.logger.info("Reading room info for " + name);
-        RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
-        roomInfos.put(name, ri);
-        for (LabyrinthChunk.Size size : ri.size)
+        if (stream == null)
         {
-            if (weightedList.get(size) == null)
+            Labyrinth.instance.logger.error("Can not read room info for " + name + " (stream is null); is the file in the correct location?");
+        }
+        else
+        {
+            Labyrinth.instance.logger.info("Reading room info for " + name);
+            RoomInfo ri = gson.<RoomInfo>fromJson(new InputStreamReader(stream), new TypeToken<RoomInfo>(){}.getType());
+            roomInfos.put(name, ri);
+            for (LabyrinthChunk.Size size : ri.size)
             {
-                weightedList.put(size, new ArrayList<String>());
-            }
-            for (int i = 0; i < ri.weight; i++)
-            {
-                weightedList.get(size).add(name);
+                if (weightedList.get(size) == null)
+                {
+                    weightedList.put(size, new ArrayList<String>());
+                }
+                for (int i = 0; i < ri.weight; i++)
+                {
+                    weightedList.get(size).add(name);
+                }
             }
         }
     }

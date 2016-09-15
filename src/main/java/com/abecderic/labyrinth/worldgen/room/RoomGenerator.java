@@ -140,7 +140,6 @@ public class RoomGenerator
                 {
                     if (!(list.get(i).getItem() instanceof ItemBlock))
                     {
-                        System.out.println("removed:" + list.get(i).getItem().getUnlocalizedName());
                         list.remove(i);
                     }
                 }
