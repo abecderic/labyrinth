@@ -29,6 +29,7 @@ public class RoomLoader
         {
             roomInfos.put(room, getInfo(room));
         }
+        Labyrinth.instance.logger.info("Read " + rooms.length + " rooms");
     }
 
     public RoomInfo getInfo(String name)

@@ -29,7 +29,7 @@ public class RoomGenerator
 
     private RoomGenerator()
     {
-        manager = new TemplateManager("assets/labyrinth/structures/");
+        manager = new TemplateManager("config/" + Labyrinth.MODID + "/structures/");
     }
 
     public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name, LabyrinthChunk.Size size, boolean exitNorth, boolean exitSouth, boolean exitEast, boolean exitWest)

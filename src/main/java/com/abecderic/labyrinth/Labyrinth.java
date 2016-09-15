@@ -42,7 +42,7 @@ public class Labyrinth
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = LogManager.getLogger(MODID);
-        roomLoader = new RoomLoader("assets/" + MODID + "/structures/");
+        roomLoader = new RoomLoader("config/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
         LabyrinthBlocks.registerBlocks();
 
