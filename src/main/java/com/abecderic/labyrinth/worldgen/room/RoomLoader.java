@@ -109,7 +109,7 @@ public class RoomLoader
     {
         if (stream == null)
         {
-            Labyrinth.instance.logger.error("Can not read room info for " + name + " (stream is null); is the file in the correct location?");
+            Labyrinth.instance.logger.error("Can not read room info for \"" + name + "\" (stream is null). The files should be at .minecraft/config/" + Labyrinth.MODID + "/structures/");
         }
         else
         {

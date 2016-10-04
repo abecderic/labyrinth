@@ -35,6 +35,11 @@ public class RoomGenerator
     public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name, LabyrinthChunk.Size size, boolean exitNorth, boolean exitSouth, boolean exitEast, boolean exitWest)
     {
         RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
+        if (ri == null)
+        {
+            Labyrinth.instance.logger.error("Tried to generate room \"" + name + "\" at chunkX=" + chunkX + ", chunkZ=" + chunkZ + " but room info is null. The files should be at .minecraft/config/" + Labyrinth.MODID + "/structures/");
+            return;
+        }
         if (ri.down != null && ri.down > 0)
         {
             y -= ri.down;
