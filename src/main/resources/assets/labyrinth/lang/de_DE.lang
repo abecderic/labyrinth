@@ -1,0 +1,15 @@
+command.usage=§cAnwendung: labyrinth <subCommand>
+command.onlyplayers=§cKann nur von Spielern angewendet werden.
+command.chunkinfo=§7Chunk-Info (%s§7, %s§7)
+command.chunkinfo.name=§7Name: %s
+command.chunkinfo.walls=§7Nord: %s§7, West: %s§7, (Ost: %s§7, Süd: %s§7)
+command.chunkinfo.size=§7Größe: %s
+command.notinlabyrinth=§cDieser Befehl funktioniert nur im Labyrinth.
+command.notinoverworld=§cDieser Befehl funktioniert nur in der Oberwelt.
+command.onlycreative=§cKann nur von Spielern im Kreativmodus angewendet werden.
+command.spawnmini.usage=§cAnwendung: labyrinth spawn-mini <chunkX> <chunkZ>
+command.spawnroom.usage=§cAnwendung: labyrinth spawn-room <name> <size> <exitNorth> <exitSouth> <exitEast> <exitWest>
+command.savetemplate.usage=§cAnwendung: labyrinth save-template <x1 y1 z1> <x2 y2 z2> <name>
+
+tile.labyrinth:daedalus.name=Daedalus-Block
+tile.labyrinth:daedalusPortal.name=Daedalus-Portal
