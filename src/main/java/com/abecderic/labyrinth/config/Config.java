@@ -12,6 +12,7 @@ public class Config
     public boolean generateRoof;
     public boolean sunlight;
     public boolean villageHouse;
+    public boolean commands;
 
     public static Config getConfig()
     {
@@ -29,6 +30,7 @@ public class Config
         generateRoof = c.getBoolean("generateRoof", "general", true, "If the labyrinth should have a roof.");
         sunlight = c.getBoolean("sunlight", "general", true, "If the sun should shine in the labyrinth dimension.");
         villageHouse = c.getBoolean("villageHouse", "general", true, "If Daedalus' Workshop should spawn in villages.");
+        commands = c.getBoolean("commands", "general", true, "If players can use commands.");
         Labyrinth.instance.roomLoader.init(c.getStringList("list", "rooms",
                 new String[]{"empty_stonebrick", "empty_wood", "cave", "hallway", "workshop", "lab", "library", "grasslands", "desert", "canal", "checkpoint", "snow", "nether", "forest"},
                 "A list of rooms in the labyrinth. Remove from here, if you don't want a room to spawn. Add here, if you added a room in a resource pack."));

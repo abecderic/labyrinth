@@ -1,5 +1,6 @@
 package com.abecderic.labyrinth.command;
 
+import com.abecderic.labyrinth.config.Config;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -20,12 +21,15 @@ public class LabyrinthCommand implements ICommand
     public LabyrinthCommand()
     {
         subCommands = new HashMap<String, ISubCommand>();
-        subCommands.put("tp-in", new CommandTpIn());
-        subCommands.put("tp-out", new CommandTpOut());
-        subCommands.put("chunk-info", new CommandChunkInfo());
-        subCommands.put("spawn-mini", new CommandSpawnMini());
-        subCommands.put("spawn-room", new CommandSpawnRoom());
-        subCommands.put("save-template", new CommandSaveTemplate());
+        if (Config.getConfig().commands)
+        {
+            subCommands.put("tp-in", new CommandTpIn());
+            subCommands.put("tp-out", new CommandTpOut());
+            subCommands.put("chunk-info", new CommandChunkInfo());
+            subCommands.put("spawn-mini", new CommandSpawnMini());
+            subCommands.put("spawn-room", new CommandSpawnRoom());
+            subCommands.put("save-template", new CommandSaveTemplate());
+        }
     }
 
     @Override
@@ -51,7 +55,12 @@ public class LabyrinthCommand implements ICommand
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
-        if (args == null || args.length == 0)
+        if (!Config.getConfig().commands)
+        {
+            sender.addChatMessage(new TextComponentTranslation("command.disabled"));
+            return;
+        }
+        else if (args == null || args.length == 0)
         {
             sender.addChatMessage(new TextComponentTranslation("command.usage"));
             return;
