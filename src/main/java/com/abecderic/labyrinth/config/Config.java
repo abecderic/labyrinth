@@ -28,7 +28,7 @@ public class Config
 
         dimId = c.getInt("dimensionId", "general", 1024, Integer.MIN_VALUE, Integer.MAX_VALUE, "The dimension id used for the labyrinth dimension");
         generateRoof = c.getBoolean("generateRoof", "general", true, "If the labyrinth should have a roof.");
-        sunlight = c.getBoolean("sunlight", "general", true, "If the sun should shine in the labyrinth dimension.");
+        sunlight = c.getBoolean("sunlight", "general", false, "If the sun should shine in the labyrinth dimension.");
         villageHouse = c.getBoolean("villageHouse", "general", true, "If Daedalus' Workshop should spawn in villages.");
         commands = c.getBoolean("commands", "general", true, "If players can use commands.");
         Labyrinth.instance.roomLoader.init(c.getStringList("list", "rooms",
