@@ -31,7 +31,11 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         if (Labyrinth.instance.worldData == null)
             Labyrinth.instance.loadWorldData(world.getMinecraftServer());
         LabyrinthChunk chunk = Labyrinth.instance.worldData.getDataForChunk(x, z, world.rand);
-        String name = Labyrinth.instance.roomLoader.getRoom(chunk.getSize(), world.rand);
+        String name = chunk.getName();
+        if (name == null || name.equalsIgnoreCase("null"))
+        {
+            name = Labyrinth.instance.roomLoader.getRoom(chunk.getSize(), world.rand);
+        }
         RoomInfo ri = null;
         if (name != null)
         {
@@ -40,6 +44,8 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         }
 
         ChunkPrimer primer = new ChunkPrimer();
+
+        /* floor */
         int y = 64;
         if (ri != null && ri.down != null && ri.down > 0)
         {
@@ -52,10 +58,17 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
                 primer.setBlockState(i, y, j, Blocks.BEDROCK.getDefaultState());
             }
         }
-        for (int j = 0; j < 7; j++)
+
+        /* corner pillar */
+        if (chunk.getNorth() != LabyrinthChunk.WallType.OPEN || chunk.getWest() != LabyrinthChunk.WallType.OPEN)
         {
-            primer.setBlockState(0, 65 + j, 0, Blocks.BEDROCK.getDefaultState());
+            for (int j = 0; j < 7; j++)
+            {
+                primer.setBlockState(0, 65 + j, 0, Blocks.BEDROCK.getDefaultState());
+            }
         }
+
+        /* north and west walls */
         for (int i = 1; i < 16; i++)
         {
             for (int j = 0; j < 7; j++)
@@ -70,6 +83,8 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
                 }
             }
         }
+
+        /* roof */
         int h = 72;
         if (ri != null && ri.up != null && ri.up > 0)
         {
@@ -84,6 +99,78 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
                     primer.setBlockState(i, h, j, Blocks.BEDROCK.getDefaultState());
                 }
             }
+        }
+
+        /* wall extension */
+        LabyrinthChunk chunkNorth = Labyrinth.instance.worldData.getDataForChunk(x, z - 1, world.rand);
+        String nameNorth = chunkNorth.getName();
+        if (nameNorth == null || nameNorth.equalsIgnoreCase("null"))
+        {
+            nameNorth = Labyrinth.instance.roomLoader.getRoom(chunkNorth.getSize(), world.rand);
+            chunkNorth.setName(nameNorth);
+            Labyrinth.instance.worldData.markDirty();
+        }
+        RoomInfo riNorth = null;
+        if (nameNorth != null)
+        {
+            riNorth = Labyrinth.instance.roomLoader.getInfo(nameNorth);
+        }
+
+        LabyrinthChunk chunkWest = Labyrinth.instance.worldData.getDataForChunk(x - 1, z, world.rand);
+        String nameWest = chunkWest.getName();
+        if (nameWest == null || nameWest.equalsIgnoreCase("null"))
+        {
+            nameWest = Labyrinth.instance.roomLoader.getRoom(chunkWest.getSize(), world.rand);
+            chunkWest.setName(nameWest);
+            Labyrinth.instance.worldData.markDirty();
+        }
+        RoomInfo riWest = null;
+        if (nameWest != null)
+        {
+            riWest = Labyrinth.instance.roomLoader.getInfo(nameWest);
+        }
+
+        int down = 0;
+        if (ri != null && ri.down != null && ri.down > 0)
+        {
+            down = ri.down;
+        }
+        int up = 0;
+        if (ri != null && ri.up != null && ri.up > 0)
+        {
+            up = ri.up;
+        }
+        /* north */
+        if (chunk.getNorth() != LabyrinthChunk.WallType.OPEN)
+        {
+            int northDown = down;
+            if (riNorth != null && riNorth.down != null && riNorth.down > 0)
+            {
+                northDown = Math.max(northDown, riNorth.down);
+            }
+            int northUp = up;
+            if (riNorth != null && riNorth.up != null && riNorth.up > 0)
+            {
+                northUp = Math.max(northUp, riNorth.up);
+            }
+            extendWallsUp(primer, northUp + 1, true);
+            extendWallsDown(primer, northDown + 1, true);
+        }
+        /* west */
+        if (chunk.getWest() != LabyrinthChunk.WallType.OPEN)
+        {
+            int westDown = down;
+            if (riWest != null && riWest.down != null && riWest.down > 0)
+            {
+                westDown = Math.max(westDown, riWest.down);
+            }
+            int westUp = up;
+            if (riWest != null && riWest.up != null && riWest.up > 0)
+            {
+                westUp = Math.max(westUp, riWest.up);
+            }
+            extendWallsUp(primer, westUp + 1, false);
+            extendWallsDown(primer, westDown + 1, false);
         }
 
         Chunk c = new Chunk(world, primer, x, z);
@@ -104,19 +191,6 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         String name = chunk.getName();
         if (name != null && !name.equalsIgnoreCase("null"))
         {
-            RoomInfo ri = Labyrinth.instance.roomLoader.getInfo(name);
-            int down = 0;
-            if (ri != null && ri.down != null && ri.down > 0)
-            {
-                down = ri.down;
-            }
-            int up = 0;
-            if (ri != null && ri.up != null && ri.up > 0)
-            {
-                up = ri.up;
-            }
-            extendWalls(x, z, up, down);
-
             if (spawnRoom)
             {
                 boolean exitNorth = chunk.getNorth() != LabyrinthChunk.WallType.WALL;
@@ -154,48 +228,30 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         /* NO-OP */
     }
 
-    private void extendWalls(int chunkX, int chunkZ, int up, int down)
-    {
-        if (up > 0)
-        {
-            extendWallsUp(chunkX, chunkZ, up, true);
-            extendWallsUp(chunkX, chunkZ, up, false);
-            extendWallsUp(chunkX, chunkZ + 1, up, true);
-            extendWallsUp(chunkX + 1, chunkZ, up, false);
-        }
-        if (down > 0)
-        {
-            extendWallsDown(chunkX, chunkZ, down, true);
-            extendWallsDown(chunkX, chunkZ, down, false);
-            extendWallsDown(chunkX, chunkZ + 1, down, true);
-            extendWallsDown(chunkX + 1, chunkZ, down, false);
-        }
-    }
-
-    private void extendWallsUp(int chunkX, int chunkZ, int up, boolean facing)
+    private void extendWallsUp(ChunkPrimer primer, int up, boolean facing)
     {
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < up; j++)
             {
                 if (facing)
-                    world.setBlockState(new BlockPos(chunkX * 16 + i, 72 + j, chunkZ * 16), Blocks.BEDROCK.getDefaultState());
+                    primer.setBlockState(i, 72 + j, 0, Blocks.BEDROCK.getDefaultState());
                 else
-                    world.setBlockState(new BlockPos(chunkX * 16, 72 + j, chunkZ * 16 + i), Blocks.BEDROCK.getDefaultState());
+                    primer.setBlockState(0, 72 + j, i, Blocks.BEDROCK.getDefaultState());
             }
         }
     }
 
-    private void extendWallsDown(int chunkX, int chunkZ, int down, boolean facing)
+    private void extendWallsDown(ChunkPrimer primer, int down, boolean facing)
     {
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < down; j++)
             {
                 if (facing)
-                    world.setBlockState(new BlockPos(chunkX * 16 + i, 64 - j, chunkZ * 16), Blocks.BEDROCK.getDefaultState());
+                    primer.setBlockState(i, 64 - j, 0, Blocks.BEDROCK.getDefaultState());
                 else
-                    world.setBlockState(new BlockPos(chunkX * 16, 64 - j, chunkZ * 16 + i), Blocks.BEDROCK.getDefaultState());
+                    primer.setBlockState(0, 64 - j, i, Blocks.BEDROCK.getDefaultState());
             }
         }
     }
