@@ -66,10 +66,41 @@ My file now looks like this:
         ]
     }
 
+### Extending up and down
+
 If your room extends up or down from the normal y-levels, add the amount as integers to the root object in the properties file, for example:
 
     "up":2,
     "down":4
+
+### Transformations
+
+With transformations you can do two things to your room:
+* rotation: Put "any", "CLOCKWISE_90", "CLOCKWISE_180" or "COUNTERCLOCKWISE_90" here to rotate your room. "any" picks a random rotation.
+* name: Put the name of the nbt file here to specify the file that the room is in. This means you can have multiple rooms with one json file depending on the surrounding rooms.
+
+You can use triggers to choose when to apply transformations. Without a trigger the transformation is applied every time the room gets generated.
+* size: This string value must match the size of the room.
+* exit*: This is a boolean that must match whether there is an exit in that direction. (Valid directions: "North", "East", "South", "West").
+
+"Transformations" is an array containing objects. Each object is one transformations and has the above mentioned parameters. Only the first transformations that fits on the generated room is executed and the order in which the transformations are read is not determined. See [canal](https://github.com/abecderic/labyrinth/blob/master/src/main/resources/assets/labyrinth/structures/canal.json) and [checkpoint](https://github.com/abecderic/labyrinth/blob/master/src/main/resources/assets/labyrinth/structures/checkpoint.json) for examples.
+
+### Replacements
+
+With replacements you can change blocks in your room once it was spawned. One replacement object contains the following:
+* original: containing the block that is in the nbt file and will be replaced
+* replacement: containing multiple blocks to replace the original block with
+* type: "all" (will replace all original blocks with the same replacement) or "single" (will choose a new replacement for every original block)
+
+A block here is an object containing the "name" of the block, for example "minecraft:stone" and optionally an array of properties. See [Block states](http://minecraft.gamepedia.com/Block_states) for valid properties.
+
+In the room [lab](https://github.com/abecderic/labyrinth/blob/master/src/main/resources/assets/labyrinth/structures/lab.json), Stone Bricks are replaced by Stone Bricks, Cracked Stone Bricks and Chiseled Stone Bricks ([properties of Stone Bricks](http://minecraft.gamepedia.com/Stone_Bricks#Block_state)). Some replacements are repeated multiple times to adjust the ratio.
+
+If a replacement block is not found, for example if you mistyped the name or the mod the block is from is not installed, the Labyrinth will simply put an Air block there.
+
+Instead of specifying the replacement block itself, you can use the OreDictionary: A replacement name of "-ore:plankWood" will choose any block that has an OreDictionary name of "plankWood". The replacement "-ore-prefix:ore" will find a block which has an OreDictionary name that begins with "ore". This will find "oreIron" and "oreLapis" among others and then choose blocks that have that OreDictionary name. See [cave](https://github.com/abecderic/labyrinth/blob/master/src/main/resources/assets/labyrinth/structures/cave.json) for an example.
+
+Multiple replacements will be executed in a not determined order. (One replacement meaning everything in one object here, so replacing all of the original block with a new block.)
 
 You can find all rooms currently in the mod [here on github](https://github.com/abecderic/labyrinth/tree/master/src/main/resources/assets/labyrinth/structures);
 use that for reference and for ideas what you can do with properties files.
@@ -85,11 +116,11 @@ Start the game and watch the console. In the initialisation phase it will print 
 
     [labyrinth]: Reading room info for campsite
 
-Make sure it doesn't crash at that point. Then explore the labyrinth to make sure the room gets generated correctly.
-(Tip: Change the config file to remove the roof from the labyrinth rooms for easier exploring.)
+Make sure it doesn't crash at that point and doesn't print an error. All rooms are loaded when "Finished reading all rooms" is printed to the console. Then explore the labyrinth to make sure the room gets generated correctly.
+(Tip: Change the config file to remove the roof from the labyrinth rooms for easier exploring.) You can also force-spawn the room where you currently are using the "spawn-room" command.
 
 ## Closing Words
 
-If you encounter a problem while following this guide, leave a bug report in the issues section. Please be very descriptive about what you did, what you expected to happen and what did happen instead. Also upload the files for any rooms you made that might be related to the crash.
+If you encounter a problem while following this guide, leave a bug report in the issues section. Please be very descriptive about what you did, what you expected to happen and what did happen instead. Also upload the files for any rooms you made that might be related to the problem.
 
 You made a few nice rooms and would like to see them in the mod? I'm open to pull requests containing rooms.
