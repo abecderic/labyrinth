@@ -5,7 +5,7 @@ import com.abecderic.labyrinth.config.Config;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 import java.util.Random;
 
@@ -16,7 +16,7 @@ public class LabyrinthWorldProvider extends WorldProvider
 
     public LabyrinthWorldProvider()
     {
-        super.hasNoSky = !Config.getConfig().sunlight;
+        super.hasSkyLight = Config.getConfig().sunlight;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class LabyrinthWorldProvider extends WorldProvider
     {
         if (gen == null)
         {
-            gen = new LabyrinthChunkGenerator(worldObj);
+            gen = new LabyrinthChunkGenerator(world);
         }
         return gen;
     }

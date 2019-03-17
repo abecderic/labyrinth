@@ -25,13 +25,13 @@ public class CommandTpIn implements ISubCommand
                 }
                 else
                 {
-                    sender.addChatMessage(new TextComponentTranslation("command.notinoverworld"));
+                    sender.sendMessage(new TextComponentTranslation("command.notinoverworld"));
                 }
             }
         }
         else
         {
-            sender.addChatMessage(new TextComponentTranslation("command.onlyplayers"));
+            sender.sendMessage(new TextComponentTranslation("command.onlyplayers"));
         }
     }
 }

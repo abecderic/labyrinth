@@ -32,17 +32,17 @@ public class CommandSpawnRoom implements ISubCommand
                 }
                 else
                 {
-                    sender.addChatMessage(new TextComponentTranslation("command.spawnroom.usage"));
+                    sender.sendMessage(new TextComponentTranslation("command.spawnroom.usage"));
                 }
             }
             else
             {
-                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
+                sender.sendMessage(new TextComponentTranslation("command.onlycreative"));
             }
         }
         else
         {
-            sender.addChatMessage(new TextComponentTranslation("command.onlyplayers"));
+            sender.sendMessage(new TextComponentTranslation("command.onlyplayers"));
         }
     }
 }

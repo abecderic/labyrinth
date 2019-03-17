@@ -34,22 +34,22 @@ public class CommandSpawnMini implements ISubCommand
                     }
                     catch (NumberFormatException e)
                     {
-                        sender.addChatMessage(new TextComponentTranslation("command.spawnmini.usage"));
+                        sender.sendMessage(new TextComponentTranslation("command.spawnmini.usage"));
                     }
                 }
                 else
                 {
-                    sender.addChatMessage(new TextComponentTranslation("command.spawnmini.usage"));
+                    sender.sendMessage(new TextComponentTranslation("command.spawnmini.usage"));
                 }
             }
             else
             {
-                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
+                sender.sendMessage(new TextComponentTranslation("command.onlycreative"));
             }
         }
         else
         {
-            sender.addChatMessage(new TextComponentTranslation("command.onlyplayers"));
+            sender.sendMessage(new TextComponentTranslation("command.onlyplayers"));
         }
     }
 

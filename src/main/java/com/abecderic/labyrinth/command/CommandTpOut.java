@@ -25,17 +25,17 @@ public class CommandTpOut implements ISubCommand
                 }
                 else
                 {
-                    sender.addChatMessage(new TextComponentTranslation("command.notinlabyrinth"));
+                    sender.sendMessage(new TextComponentTranslation("command.notinlabyrinth"));
                 }
             }
             else
             {
-                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
+                sender.sendMessage(new TextComponentTranslation("command.onlycreative"));
             }
         }
         else
         {
-            sender.addChatMessage(new TextComponentTranslation("command.onlyplayers"));
+            sender.sendMessage(new TextComponentTranslation("command.onlyplayers"));
         }
     }
 }

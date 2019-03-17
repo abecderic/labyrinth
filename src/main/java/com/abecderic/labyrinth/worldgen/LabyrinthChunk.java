@@ -2,6 +2,8 @@ package com.abecderic.labyrinth.worldgen;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
+
 public class LabyrinthChunk
 {
     private int x;
@@ -95,7 +97,7 @@ public class LabyrinthChunk
         return name;
     }
 
-    public void setName(String name)
+    public void setName(@Nonnull String name)
     {
         this.name = name;
     }
@@ -104,7 +106,7 @@ public class LabyrinthChunk
     {
         WALL,
         EXIT,
-        OPEN;
+        OPEN
     }
 
     public enum Size

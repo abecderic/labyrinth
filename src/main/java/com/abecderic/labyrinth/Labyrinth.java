@@ -1,6 +1,5 @@
 package com.abecderic.labyrinth;
 
-import com.abecderic.labyrinth.block.LabyrinthBlocks;
 import com.abecderic.labyrinth.command.LabyrinthCommand;
 import com.abecderic.labyrinth.config.Config;
 import com.abecderic.labyrinth.proxy.CommonProxy;
@@ -15,7 +14,9 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +45,6 @@ public class Labyrinth
         logger = LogManager.getLogger(MODID);
         roomLoader = new RoomLoader("config/" + MODID + "/structures/");
         Config.getConfig().init(event.getSuggestedConfigurationFile());
-        LabyrinthBlocks.registerBlocks();
 
         if (Config.getConfig().villageHouse)
         {
@@ -75,11 +75,11 @@ public class Labyrinth
     public void loadWorldData(MinecraftServer server)
     {
         if (worldData != null) return;
-        worldData = (LabyrinthWorldData) server.worldServerForDimension(Config.getConfig().dimId).loadItemData(LabyrinthWorldData.class, MODID);
+        worldData = (LabyrinthWorldData) server.getWorld(Config.getConfig().dimId).loadData(LabyrinthWorldData.class, MODID);
         if (worldData == null)
         {
             worldData = new LabyrinthWorldData(MODID);
-            server.worldServerForDimension(Config.getConfig().dimId).setItemData(MODID, worldData);
+            server.getWorld(Config.getConfig().dimId).setData(MODID, worldData);
         }
     }
 }

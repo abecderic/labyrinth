@@ -23,8 +23,8 @@ import java.util.Random;
 
 public class BlockDaedalusPortal extends Block
 {
-    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
-    protected static final AxisAlignedBB ENTITY_AABB = new AxisAlignedBB(-3.0D, -2.0D, -3.0D, 4.0D, 2.0D, 4.0D);
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
+    private static final AxisAlignedBB ENTITY_AABB = new AxisAlignedBB(-3.0D, -2.0D, -3.0D, 4.0D, 2.0D, 4.0D);
 
     public BlockDaedalusPortal()
     {
@@ -44,7 +44,7 @@ public class BlockDaedalusPortal extends Block
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-        if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.isNonBoss() && !worldIn.isRemote && entityIn.getEntityBoundingBox().intersectsWith(state.getBoundingBox(worldIn, pos).offset(pos)) && entityIn instanceof EntityPlayerMP)
+        if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.isNonBoss() && !worldIn.isRemote && entityIn.getEntityBoundingBox().intersects(state.getBoundingBox(worldIn, pos).offset(pos)) && entityIn instanceof EntityPlayerMP)
         {
             if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() != LabyrinthBlocks.portal)
             {
@@ -102,10 +102,11 @@ public class BlockDaedalusPortal extends Block
         return AABB;
     }
 
+    @Nullable
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {
-        /* NO-OP */
+        return NULL_AABB;
     }
 
     @Override

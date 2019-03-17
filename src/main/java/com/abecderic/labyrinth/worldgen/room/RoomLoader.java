@@ -42,7 +42,7 @@ public class RoomLoader
         {
             readInfo(name);
         }
-        return roomInfos.containsKey(name) ? roomInfos.get(name) : null;
+        return roomInfos.getOrDefault(name, null);
     }
 
     public String getRoom(LabyrinthChunk.Size size, Random random)

@@ -38,28 +38,28 @@ public class CommandSaveTemplate implements ISubCommand
                         MinecraftServer minecraftserver = player.getServerWorld().getMinecraftServer();
                         TemplateManager templatemanager = player.getServerWorld().getStructureTemplateManager();
                         Template template = templatemanager.getTemplate(minecraftserver, new ResourceLocation(name));
-                        template.takeBlocksFromWorld(player.getEntityWorld(), pos, size, false, Blocks.field_189881_dj);
+                        template.takeBlocksFromWorld(player.getEntityWorld(), pos, size, false, Blocks.STRUCTURE_VOID);
                         template.setAuthor(player.getDisplayNameString());
                         templatemanager.writeTemplate(minecraftserver, new ResourceLocation(name));
                     }
                     catch (NumberFormatException e)
                     {
-                        sender.addChatMessage(new TextComponentTranslation("command.savetemplate.usage"));
+                        sender.sendMessage(new TextComponentTranslation("command.savetemplate.usage"));
                     }
                 }
                 else
                 {
-                    sender.addChatMessage(new TextComponentTranslation("command.savetemplate.usage"));
+                    sender.sendMessage(new TextComponentTranslation("command.savetemplate.usage"));
                 }
             }
             else
             {
-                sender.addChatMessage(new TextComponentTranslation("command.onlycreative"));
+                sender.sendMessage(new TextComponentTranslation("command.onlycreative"));
             }
         }
         else
         {
-            sender.addChatMessage(new TextComponentTranslation("command.onlyplayers"));
+            sender.sendMessage(new TextComponentTranslation("command.onlyplayers"));
         }
     }
 }

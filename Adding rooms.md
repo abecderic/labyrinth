@@ -47,7 +47,7 @@ You'll need to adjust "Relative Position" and "Structure Size" accordingly.
 
 [Picture: Room with Structure Block outline](http://i.imgur.com/UmzRiuJ.png)
 
-You'll now find the first file needed in .minecraft/worlds/YourWorldName/structures/YourRoomName.nbt
+You'll now find the first file needed in .minecraft/saves/YourWorldName/structures/YourRoomName.nbt
 
 ## Part 3: The Properties File
 

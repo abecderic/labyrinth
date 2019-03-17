@@ -32,7 +32,7 @@ public class Config
         villageHouse = c.getBoolean("villageHouse", "general", true, "If Daedalus' Workshop should spawn in villages.");
         commands = c.getBoolean("commands", "general", true, "If players can use commands.");
         Labyrinth.instance.roomLoader.init(c.getStringList("list", "rooms",
-                new String[]{"empty_stonebrick", "empty_wood", "cave", "hallway", "workshop", "lab", "library", "grasslands", "desert", "canal", "checkpoint", "snow", "nether", "forest"},
+                new String[]{"empty_stonebrick", "empty_wood", "cave", "hallway", "workshop", "lab", "library", "grasslands", "desert", "canal", "checkpoint", "snow", "nether", "forest", "meadow"},
                 "A list of rooms in the labyrinth. Remove from here, if you don't want a room to spawn. Add here, if you added a room in a resource pack."));
 
         if (c.hasChanged())

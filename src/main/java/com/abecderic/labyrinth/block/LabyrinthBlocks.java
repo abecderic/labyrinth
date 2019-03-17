@@ -5,26 +5,18 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class LabyrinthBlocks
 {
     public static final String DAEDALUS = "daedalus";
+    @GameRegistry.ObjectHolder(Labyrinth.MODID + ":" + LabyrinthBlocks.DAEDALUS)
     public static Block daedalus;
-    public static final String PORTAL = "daedalusPortal";
-    public static Block portal;
 
-    public static void registerBlocks()
-    {
-        daedalus = new BlockDaedalus();
-        GameRegistry.register(daedalus);
-        GameRegistry.register(new ItemBlock(daedalus).setRegistryName(daedalus.getRegistryName()));
-        portal = new BlockDaedalusPortal();
-        GameRegistry.register(portal);
-        GameRegistry.register(new ItemBlock(portal).setRegistryName(portal.getRegistryName()));
-    }
+    public static final String PORTAL = "daedalusportal";
+    @GameRegistry.ObjectHolder(Labyrinth.MODID + ":" + LabyrinthBlocks.PORTAL)
+    public static Block portal;
 
     public static void registerModels()
     {

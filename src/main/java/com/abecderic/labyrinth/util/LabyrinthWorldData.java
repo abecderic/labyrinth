@@ -3,7 +3,7 @@ package com.abecderic.labyrinth.util;
 import com.abecderic.labyrinth.worldgen.LabyrinthChunk;
 import com.abecderic.labyrinth.worldgen.algorithm.LabyrinthGenerator;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.HashMap;
 import java.util.Map;

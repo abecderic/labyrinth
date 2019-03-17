@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,7 +26,7 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     }
 
     @Override
-    public Chunk provideChunk(int x, int z)
+    public Chunk generateChunk(int x, int z)
     {
         if (Labyrinth.instance.worldData == null)
             Labyrinth.instance.loadWorldData(world.getMinecraftServer());
@@ -107,8 +107,15 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         if (nameNorth == null || nameNorth.equalsIgnoreCase("null"))
         {
             nameNorth = Labyrinth.instance.roomLoader.getRoom(chunkNorth.getSize(), world.rand);
-            chunkNorth.setName(nameNorth);
-            Labyrinth.instance.worldData.markDirty();
+            if (nameNorth != null)
+            {
+                chunkNorth.setName(nameNorth);
+                Labyrinth.instance.worldData.markDirty();
+            }
+            else
+            {
+                Labyrinth.instance.logger.error("got null for nameNorth for size " + chunkNorth.getSize());
+            }
         }
         RoomInfo riNorth = null;
         if (nameNorth != null)
@@ -121,8 +128,15 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
         if (nameWest == null || nameWest.equalsIgnoreCase("null"))
         {
             nameWest = Labyrinth.instance.roomLoader.getRoom(chunkWest.getSize(), world.rand);
-            chunkWest.setName(nameWest);
-            Labyrinth.instance.worldData.markDirty();
+            if (nameWest != null)
+            {
+                chunkWest.setName(nameWest);
+                Labyrinth.instance.worldData.markDirty();
+            }
+            else
+            {
+                Labyrinth.instance.logger.error("got null for nameWest for size " + chunkWest.getSize());
+            }
         }
         RoomInfo riWest = null;
         if (nameWest != null)
@@ -211,13 +225,13 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     @Override
     public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
     {
-        Biome biome = world.getBiomeGenForCoords(pos);
+        Biome biome = world.getBiome(pos);
         return biome.getSpawnableList(creatureType);
     }
 
     @Nullable
     @Override
-    public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position)
+    public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored)
     {
         return null;
     }
@@ -226,6 +240,12 @@ public class LabyrinthChunkGenerator implements IChunkGenerator
     public void recreateStructures(Chunk chunkIn, int x, int z)
     {
         /* NO-OP */
+    }
+
+    @Override
+    public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
+    {
+        return false;
     }
 
     private void extendWallsUp(ChunkPrimer primer, int up, boolean facing)

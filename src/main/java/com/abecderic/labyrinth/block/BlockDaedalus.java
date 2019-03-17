@@ -9,13 +9,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockDaedalus extends Block
@@ -39,11 +37,11 @@ public class BlockDaedalus extends Block
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (!worldIn.isRemote)
         {
-            if (playerIn.isCreative() && playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).getItem() == Items.STICK)
+            if (playerIn.isCreative() && playerIn.getHeldItem(hand).getItem() == Items.STICK)
             {
                 if (worldIn.getBlockState(pos).getValue(DELTA))
                 {

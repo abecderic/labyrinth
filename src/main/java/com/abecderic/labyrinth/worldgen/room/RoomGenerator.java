@@ -11,6 +11,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -29,7 +30,7 @@ public class RoomGenerator
 
     private RoomGenerator()
     {
-        manager = new TemplateManager("config/" + Labyrinth.MODID + "/structures/");
+        manager = new TemplateManager("config/" + Labyrinth.MODID + "/structures/", new DataFixer(0));
     }
 
     public void generateRoomAt(World world, int chunkX, int y, int chunkZ, String name, LabyrinthChunk.Size size, boolean exitNorth, boolean exitSouth, boolean exitEast, boolean exitWest)

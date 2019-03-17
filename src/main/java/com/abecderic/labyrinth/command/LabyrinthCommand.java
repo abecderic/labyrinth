@@ -20,7 +20,7 @@ public class LabyrinthCommand implements ICommand
 
     public LabyrinthCommand()
     {
-        subCommands = new HashMap<String, ISubCommand>();
+        subCommands = new HashMap<>();
         if (Config.getConfig().commands)
         {
             subCommands.put("tp-in", new CommandTpIn());
@@ -33,22 +33,22 @@ public class LabyrinthCommand implements ICommand
     }
 
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "labyrinth";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender)
+    public String getUsage(ICommandSender sender)
     {
         return new TextComponentTranslation("command.usage").getUnformattedText();
     }
 
     @Override
-    public List<String> getCommandAliases()
+    public List<String> getAliases()
     {
         ArrayList<String> list = new ArrayList<String>();
-        list.add(getCommandName());
+        list.add(getName());
         return list;
     }
 
@@ -57,13 +57,11 @@ public class LabyrinthCommand implements ICommand
     {
         if (!Config.getConfig().commands)
         {
-            sender.addChatMessage(new TextComponentTranslation("command.disabled"));
-            return;
+            sender.sendMessage(new TextComponentTranslation("command.disabled"));
         }
-        else if (args == null || args.length == 0)
+        else if (args.length == 0)
         {
-            sender.addChatMessage(new TextComponentTranslation("command.usage"));
-            return;
+            sender.sendMessage(new TextComponentTranslation("command.usage"));
         }
         else
         {
@@ -75,7 +73,7 @@ public class LabyrinthCommand implements ICommand
                     return;
                 }
             }
-            sender.addChatMessage(new TextComponentTranslation("command.usage"));
+            sender.sendMessage(new TextComponentTranslation("command.usage"));
         }
     }
 
@@ -86,18 +84,15 @@ public class LabyrinthCommand implements ICommand
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
-        if (args == null || args.length <= 1)
+        if (args.length <= 1)
         {
-            List<String> list = new ArrayList<String>();
-            for (String s : subCommands.keySet())
-                list.add(s);
-            return list;
+            return new ArrayList<>(subCommands.keySet());
         }
         else
         {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
     }
 
@@ -110,6 +105,6 @@ public class LabyrinthCommand implements ICommand
     @Override
     public int compareTo(ICommand o)
     {
-        return o.getCommandName().compareTo(getCommandName());
+        return o.getName().compareTo(getName());
     }
 }
